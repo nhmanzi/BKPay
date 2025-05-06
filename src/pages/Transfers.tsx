@@ -69,7 +69,7 @@ const Transfers = () => {
               <div className="text-sm font-medium text-gray-500">Available Balance</div>
               <Wallet className="h-5 w-5 text-primary-500" />
             </div>
-            <div className="text-3xl font-semibold text-gray-900">$12,250.75</div>
+            <div className="text-3xl font-semibold text-gray-900">RWF 15,925,975</div>
             <div className="mt-1 text-sm text-gray-500">
               Last updated: {format(new Date(), 'MMM d, yyyy')}
             </div>
@@ -82,7 +82,7 @@ const Transfers = () => {
               <div className="text-sm font-medium text-gray-500">Pending</div>
               <Calendar className="h-5 w-5 text-warning-500" />
             </div>
-            <div className="text-3xl font-semibold text-gray-900">$3,000.00</div>
+            <div className="text-3xl font-semibold text-gray-900">RWF 3,900,000</div>
             <div className="mt-1 text-sm text-gray-500">2 pending transfers</div>
           </div>
         </div>
@@ -93,14 +93,14 @@ const Transfers = () => {
               <div className="text-sm font-medium text-gray-500">Transfer Limit</div>
               <ArrowUpDown className="h-5 w-5 text-gray-500" />
             </div>
-            <div className="text-3xl font-semibold text-gray-900">$50,000.00<span className="text-sm font-normal text-gray-500 ml-2">/ month</span></div>
+            <div className="text-3xl font-semibold text-gray-900">RWF 65,000,000<span className="text-sm font-normal text-gray-500 ml-2">/ month</span></div>
             <div className="mt-2">
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div className="bg-primary-600 h-2.5 rounded-full" style={{ width: '30%' }}></div>
               </div>
               <div className="flex justify-between mt-1 text-xs text-gray-500">
-                <span>$15,000 used</span>
-                <span>$35,000 remaining</span>
+                <span>RWF 19,500,000 used</span>
+                <span>RWF 45,500,000 remaining</span>
               </div>
             </div>
           </div>
@@ -197,7 +197,7 @@ const Transfers = () => {
                 </label>
                 <div className="relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500">$</span>
+                    <span className="text-gray-500">RWF</span>
                   </div>
                   <input
                     type="text"
@@ -205,7 +205,7 @@ const Transfers = () => {
                     placeholder="0.00"
                   />
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500">USD</span>
+                    <span className="text-gray-500">RWF</span>
                   </div>
                 </div>
               </div>
@@ -300,7 +300,7 @@ const Transfers = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${transfer.amount.toFixed(2)}</div>
+                    <div className="text-sm text-gray-900">RWF {transfer.amount.toFixed(2)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeColor(transfer.status)}`}>

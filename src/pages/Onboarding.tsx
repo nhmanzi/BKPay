@@ -256,7 +256,7 @@ const Onboarding = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <span className="text-3xl font-bold text-gray-900">$29</span>
+                    <span className="text-3xl font-bold text-gray-900">RWF 37,700</span>
                     <span className="text-gray-600 ml-1">/mo</span>
                   </div>
                   <ul className="space-y-2 mb-6">
@@ -292,7 +292,7 @@ const Onboarding = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <span className="text-3xl font-bold text-gray-900">$79</span>
+                    <span className="text-3xl font-bold text-gray-900">RWF 102,700</span>
                     <span className="text-gray-600 ml-1">/mo</span>
                   </div>
                   <ul className="space-y-2 mb-6">
@@ -329,7 +329,7 @@ const Onboarding = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <span className="text-3xl font-bold text-gray-900">$199</span>
+                    <span className="text-3xl font-bold text-gray-900">RWF 258,700</span>
                     <span className="text-gray-600 ml-1">/mo</span>
                   </div>
                   <ul className="space-y-2 mb-6">

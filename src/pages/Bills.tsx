@@ -150,7 +150,7 @@ const Bills = () => {
                   Amount
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-2 text-gray-500">$</span>
+                  <span className="absolute left-3 top-2 text-gray-500">RWF</span>
                   <input
                     type="number"
                     value={newBillData.amount || ''}
@@ -359,7 +359,7 @@ const Bills = () => {
                     <div className="text-sm text-gray-500">{bill.email}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${bill.amount.toFixed(2)}</div>
+                    <div className="text-sm text-gray-900">RWF {bill.amount.toFixed(2)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeColor(bill.status)}`}>

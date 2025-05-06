@@ -72,7 +72,7 @@ const Dashboard = () => {
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Revenue</dt>
                   <dd>
-                    <div className="text-lg font-semibold text-gray-900">$24,567.84</div>
+                    <div className="text-lg font-semibold text-gray-900">RWF 31,938,192</div>
                     <div className="flex items-center text-xs font-medium text-success-600">
                       <ArrowUpRight className="h-3 w-3 mr-1" />
                       <span>12.5% from last week</span>
@@ -116,7 +116,7 @@ const Dashboard = () => {
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Transactions</dt>
                   <dd>
-                    <div className="text-lg font-semibold text-gray-900">842</div>
+                    <div className="text-lg font-semibold text-gray-900">RWF 37,960</div>
                     <div className="flex items-center text-xs font-medium text-error-600">
                       <ArrowDownRight className="h-3 w-3 mr-1" />
                       <span>3.1% from last week</span>
@@ -138,7 +138,7 @@ const Dashboard = () => {
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Average Sale</dt>
                   <dd>
-                    <div className="text-lg font-semibold text-gray-900">$29.20</div>
+                    <div className="text-lg font-semibold text-gray-900">RWF 29.20</div>
                     <div className="flex items-center text-xs font-medium text-success-600">
                       <ArrowUpRight className="h-3 w-3 mr-1" />
                       <span>7.3% from last week</span>
@@ -262,7 +262,7 @@ const Dashboard = () => {
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        ${transaction.amount.toFixed(2)}
+                        RWF {transaction.amount.toFixed(2)}
                       </div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
