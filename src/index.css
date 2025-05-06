@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary-50: 239 246 255;
+    --color-primary-100: 219 234 254;
+    --color-primary-200: 191 219 254;
+    --color-primary-300: 147 197 253;
+    --color-primary-400: 96 165 250;
+    --color-primary-500: 59 130 246;
+    --color-primary-600: 37 99 235;
+    --color-primary-700: 29 78 216;
+    --color-primary-800: 30 64 175;
+    --color-primary-900: 30 58 138;
+    --color-primary-950: 23 37 84;
+    
+    --color-secondary-50: 250 245 255;
+    --color-secondary-100: 243 232 255;
+    --color-secondary-200: 233 213 255;
+    --color-secondary-300: 216 180 254;
+    --color-secondary-400: 192 132 252;
+    --color-secondary-500: 168 85 247;
+    --color-secondary-600: 147 51 234;
+    --color-secondary-700: 126 34 206;
+    --color-secondary-800: 107 33 168;
+    --color-secondary-900: 88 28 135;
+    --color-secondary-950: 59 7 100;
+    
+    --color-accent-50: 240 253 250;
+    --color-accent-100: 204 251 241;
+    --color-accent-200: 153 246 228;
+    --color-accent-300: 94 234 212;
+    --color-accent-400: 45 212 191;
+    --color-accent-500: 20 184 166;
+    --color-accent-600: 13 148 136;
+    --color-accent-700: 15 118 110;
+    --color-accent-800: 17 94 89;
+    --color-accent-900: 19 78 74;
+    --color-accent-950: 4 47 46;
+    
+    --color-success-50: 240 253 244;
+    --color-success-100: 220 252 231;
+    --color-success-200: 187 247 208;
+    --color-success-300: 134 239 172;
+    --color-success-400: 74 222 128;
+    --color-success-500: 34 197 94;
+    --color-success-600: 22 163 74;
+    --color-success-700: 21 128 61;
+    --color-success-800: 22 101 52;
+    --color-success-900: 20 83 45;
+    --color-success-950: 5 46 22;
+    
+    --color-warning-50: 255 251 235;
+    --color-warning-100: 254 243 199;
+    --color-warning-200: 254 230 138;
+    --color-warning-300: 252 211 77;
+    --color-warning-400: 251 191 36;
+    --color-warning-500: 245 158 11;
+    --color-warning-600: 217 119 6;
+    --color-warning-700: 180 83 9;
+    --color-warning-800: 146 64 14;
+    --color-warning-900: 120 53 15;
+    --color-warning-950: 69 26 3;
+    
+    --color-error-50: 254 242 242;
+    --color-error-100: 254 226 226;
+    --color-error-200: 254 202 202;
+    --color-error-300: 252 165 165;
+    --color-error-400: 248 113 113;
+    --color-error-500: 239 68 68;
+    --color-error-600: 220 38 38;
+    --color-error-700: 185 28 28;
+    --color-error-800: 153 27 27;
+    --color-error-900: 127 29 29;
+    --color-error-950: 69 10 10;
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium tracking-tight leading-tight;
+  }
+
+  h1 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+
+  p, li, td, th {
+    @apply leading-relaxed;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-600 text-white hover:bg-secondary-700 active:bg-secondary-800;
+  }
+
+  .btn-outline {
+    @apply border border-gray-300 bg-white text-gray-900 hover:bg-gray-100 active:bg-gray-200;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-gray-700 hover:bg-gray-100 active:bg-gray-200;
+  }
+
+  .input {
+    @apply w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .card {
+    @apply rounded-lg border border-gray-200 bg-white shadow-sm transition-all;
+  }
+
+  .card-hover {
+    @apply hover:border-primary-200 hover:shadow;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-primary-100 text-primary-800;
+  }
+
+  .badge-secondary {
+    @apply bg-secondary-100 text-secondary-800;
+  }
+
+  .badge-success {
+    @apply bg-success-100 text-success-800;
+  }
+
+  .badge-warning {
+    @apply bg-warning-100 text-warning-800;
+  }
+
+  .badge-error {
+    @apply bg-error-100 text-error-800;
+  }
+}
