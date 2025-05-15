@@ -39,7 +39,7 @@ const AuthLayout = () => {
       
       {/* Right side - Auth forms */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-4 sm:p-8">
-        <div className="w-full max-w-md">
+        <div className="w-full ">
           <Outlet />
         </div>
       </div>

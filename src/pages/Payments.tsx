@@ -6,27 +6,58 @@ import {
   ChevronDown, 
   ChevronRight,
   ArrowUpDown,
-  MoreHorizontal
+  MoreHorizontal,
+  X
 } from 'lucide-react';
 
 const paymentData = [
-  { id: '45612378', customer: 'Jane Cooper', email: 'jane.cooper@example.com', amount: 124.00, status: 'completed', date: '2023-04-23', type: 'credit' },
-  { id: '89123456', customer: 'Wade Warren', email: 'wade.warren@example.com', amount: 75.50, status: 'processing', date: '2023-04-22', type: 'debit' },
-  { id: '87651234', customer: 'Esther Howard', email: 'esther.howard@example.com', amount: 234.00, status: 'completed', date: '2023-04-21', type: 'credit' },
-  { id: '54612378', customer: 'Cameron Williamson', email: 'cameron.williamson@example.com', amount: 180.90, status: 'completed', date: '2023-04-20', type: 'credit' },
-  { id: '56712378', customer: 'Brooklyn Simmons', email: 'brooklyn.simmons@example.com', amount: 14.90, status: 'failed', date: '2023-04-19', type: 'debit' },
-  { id: '76512378', customer: 'Leslie Alexander', email: 'leslie.alexander@example.com', amount: 149.00, status: 'completed', date: '2023-04-18', type: 'credit' },
-  { id: '96312378', customer: 'Dianne Russell', email: 'dianne.russell@example.com', amount: 56.80, status: 'processing', date: '2023-04-17', type: 'credit' },
-  { id: '87122378', customer: 'Guy Hawkins', email: 'guy.hawkins@example.com', amount: 320.00, status: 'completed', date: '2023-04-16', type: 'credit' },
-  { id: '36512378', customer: 'Theresa Webb', email: 'theresa.webb@example.com', amount: 19.99, status: 'failed', date: '2023-04-15', type: 'debit' },
-  { id: '41512378', customer: 'Cody Fisher', email: 'cody.fisher@example.com', amount: 89.90, status: 'completed', date: '2023-04-14', type: 'credit' },
+  { id: '45612378', customer: 'Jado Mugabo', email: 'jado.mugabo@example.com', amount: 125000, status: 'completed', date: '2023-04-23', type: 'credit' },
+  { id: '89123456', customer: 'Sifa Mutesi', email: 'sifa.mutesi@example.com', amount: 75000, status: 'processing', date: '2023-04-22', type: 'debit' },
+  { id: '87651234', customer: 'Theo Iradukunda', email: 'theo.iradukunda@example.com', amount: 234000, status: 'completed', date: '2023-04-21', type: 'credit' },
+  { id: '54612378', customer: 'Lina Umutesi', email: 'lina.umutesi@example.com', amount: 180900, status: 'completed', date: '2023-04-20', type: 'credit' },
+  { id: '56712378', customer: 'Brian Nkurunziza', email: 'brian.nkurunziza@example.com', amount: 149000, status: 'failed', date: '2023-04-19', type: 'debit' },
+  { id: '76512378', customer: 'Diane Mukamana', email: 'diane.mukamana@example.com', amount: 149000, status: 'completed', date: '2023-04-18', type: 'credit' },
+  { id: '96312378', customer: 'Nina Uwizeye', email: 'nina.uwizeye@example.com', amount: 56800, status: 'processing', date: '2023-04-17', type: 'credit' },
+  { id: '87122378', customer: 'Allan Gatera', email: 'allan.gatera@example.com', amount: 320000, status: 'completed', date: '2023-04-16', type: 'credit' },
+  { id: '36512378', customer: 'Lysa Niyitegeka', email: 'lysa.niyitegeka@example.com', amount: 199000, status: 'failed', date: '2023-04-15', type: 'debit' },
+  { id: '41512378', customer: 'Tony Habineza', email: 'tony.habineza@example.com', amount: 89900, status: 'completed', date: '2023-04-14', type: 'credit' },
 ];
 
 const Payments = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [showNewPaymentModal, setShowNewPaymentModal] = useState(false);
+  const [newPayment, setNewPayment] = useState({
+    customer: '',
+    email: '',
+    amount: '',
+    type: 'credit',
+    status: 'processing'
+  });
   
+  const handleAddPayment = () => {
+    const payment = {
+      id: Math.floor(Math.random() * 90000000 + 10000000).toString(),
+      customer: newPayment.customer,
+      email: newPayment.email,
+      amount: parseInt(newPayment.amount),
+      status: newPayment.status,
+      date: new Date().toISOString().split('T')[0],
+      type: newPayment.type
+    };
+    
+    paymentData.unshift(payment);
+    setShowNewPaymentModal(false);
+    setNewPayment({
+      customer: '',
+      email: '',
+      amount: '',
+      type: 'credit',
+      status: 'processing'
+    });
+  };
+
   const filteredPayments = paymentData.filter(payment => {
     const matchesSearch = 
       payment.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -48,11 +79,115 @@ const Payments = () => {
             <Download className="h-4 w-4 mr-2" />
             Export
           </button>
-          <button className="btn btn-primary">
+          <button 
+            className="btn btn-primary hidden"
+            onClick={() => setShowNewPaymentModal(true)}
+          >
             + New Payment
           </button>
         </div>
       </div>
+
+      {/* New Payment Modal */}
+      {showNewPaymentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">New Payment</h2>
+              <button 
+                onClick={() => setShowNewPaymentModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Customer Name
+                </label>
+                <input
+                  type="text"
+                  value={newPayment.customer}
+                  onChange={(e) => setNewPayment(prev => ({ ...prev, customer: e.target.value }))}
+                  className="input w-full"
+                  placeholder="Enter customer name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={newPayment.email}
+                  onChange={(e) => setNewPayment(prev => ({ ...prev, email: e.target.value }))}
+                  className="input w-full"
+                  placeholder="Enter customer email"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Amount
+                </label>
+                <div className="relative">
+                  <span className="absolute left-2 top-2 text-gray-500">RWF</span>
+                  <input
+                    type="number"
+                    value={newPayment.amount}
+                    onChange={(e) => setNewPayment(prev => ({ ...prev, amount: e.target.value }))}
+                    className="input w-full pl-[48px]"
+                    placeholder="0"
+                    min="0"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Payment Type
+                </label>
+                <select
+                  value={newPayment.type}
+                  onChange={(e) => setNewPayment(prev => ({ ...prev, type: e.target.value }))}
+                  className="input w-full"
+                >
+                  <option value="credit">Credit</option>
+                  <option value="debit">Debit</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Status
+                </label>
+                <select
+                  value={newPayment.status}
+                  onChange={(e) => setNewPayment(prev => ({ ...prev, status: e.target.value }))}
+                  className="input w-full"
+                >
+                  <option value="processing">Processing</option>
+                  <option value="completed">Completed</option>
+                  <option value="failed">Failed</option>
+                </select>
+              </div>
+
+              <div className="pt-4">
+                <button
+                  className="btn btn-primary w-full"
+                  onClick={handleAddPayment}
+                  disabled={!newPayment.customer || !newPayment.email || !newPayment.amount}
+                >
+                  Add Payment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 p-5">
@@ -165,7 +300,7 @@ const Payments = () => {
                     <div className="text-sm text-gray-500">{payment.email}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">RWF {payment.amount.toFixed(2)}</div>
+                    <div className="text-sm text-gray-900">RWF {payment.amount.toLocaleString()}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

@@ -34,11 +34,11 @@ const data = [
 ];
 
 const recentTransactions = [
-  { id: 1, customer: 'Jane Cooper', amount: 124.00, status: 'completed', date: '2h ago' },
-  { id: 2, customer: 'Wade Warren', amount: 75.50, status: 'processing', date: '3h ago' },
-  { id: 3, customer: 'Esther Howard', amount: 234.00, status: 'completed', date: '4h ago' },
-  { id: 4, customer: 'Cameron Williamson', amount: 180.90, status: 'completed', date: '6h ago' },
-  { id: 5, customer: 'Brooklyn Simmons', amount: 14.90, status: 'failed', date: '12h ago' },
+  { id: 1, customer: 'Léon Muneza', amount: 1240.00, status: 'completed', date: '2h ago' },
+  { id: 2, customer: 'Teta Irakoze', amount: 75050, status: 'processing', date: '3h ago' },
+  { id: 3, customer: 'Eric Hirwa', amount: 23400, status: 'completed', date: '4h ago' },
+  { id: 4, customer: 'Ines Kamanzi', amount: 18090, status: 'completed', date: '6h ago' },
+  { id: 5, customer: 'Rita Nikuze', amount: 1490, status: 'failed', date: '12h ago' },
 ];
 
 const Dashboard = () => {
@@ -72,7 +72,7 @@ const Dashboard = () => {
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Revenue</dt>
                   <dd>
-                    <div className="text-lg font-semibold text-gray-900">RWF 31,938,192</div>
+                    <div className="text-lg font-semibold text-gray-900">RWF 338,192</div>
                     <div className="flex items-center text-xs font-medium text-success-600">
                       <ArrowUpRight className="h-3 w-3 mr-1" />
                       <span>12.5% from last week</span>
@@ -138,7 +138,7 @@ const Dashboard = () => {
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Average Sale</dt>
                   <dd>
-                    <div className="text-lg font-semibold text-gray-900">RWF 29.20</div>
+                    <div className="text-lg font-semibold text-gray-900">RWF 24,000</div>
                     <div className="flex items-center text-xs font-medium text-success-600">
                       <ArrowUpRight className="h-3 w-3 mr-1" />
                       <span>7.3% from last week</span>

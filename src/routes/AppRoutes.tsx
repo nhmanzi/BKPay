@@ -17,6 +17,8 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Onboarding from '../pages/Onboarding';
 import NotFound from '../pages/NotFound';
+import TableTentDesigner from '../pages/TableTentDesigner';
+import RequestLoan from '../pages/RequestLoan';
 
 // Protected route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -58,7 +60,9 @@ const AppRoutes = () => {
         <Route path="/payments" element={<Payments />} />
         <Route path="/bills" element={<Bills />} />
         <Route path="/transfers" element={<Transfers />} />
+        <Route path="/request-loan" element={<RequestLoan />} />
         <Route path="/flyers" element={<Flyers />} />
+        <Route path="/table-tent-designer/:templateType" element={<TableTentDesigner />} />
       </Route>
 
       {/* 404 route */}

@@ -9,9 +9,10 @@ import {
   Megaphone,
   Settings,
   HelpCircle,
-  LogOut
+  LogOut,
+  HandCoins
 } from 'lucide-react';
-
+import BKPayLogo from '../../assets/BKPAY.svg';
 interface SidebarProps {
   mobile?: boolean;
   closeSidebar?: () => void;
@@ -26,7 +27,8 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
     { name: 'Payments', href: '/payments', icon: CreditCard },
     { name: 'Bills', href: '/bills', icon: Receipt },
     { name: 'Transfers', href: '/transfers', icon: ArrowRightLeft },
-    { name: 'Flyers', href: '/flyers', icon: Megaphone },
+    { name: 'Request Loan', href: '/request-loan', icon: HandCoins },
+    { name: 'Brand kit', href: '/flyers', icon: Megaphone },
   ];
 
   const secondaryNavigation = [
@@ -51,23 +53,20 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
     <div className="flex flex-col h-full bg-white border-r border-gray-200">
       {/* Logo */}
       <div className="flex items-center h-16 px-4 border-b border-gray-200">
-        <div className="flex items-center space-x-2">
-          <CreditCard className="h-6 w-6 text-primary-600" />
-          <span className="text-lg font-bold text-gray-900">MerchantPay</span>
+      <div className="flex items-center my-3">
+          <span className=" text-primary-600 font-bold rounded-full px-3 py-1 text-2xl mr-2">
+            <img src={BKPayLogo} alt="BKPay Logo" className="h-10 w-auto" />
+          </span>
+
         </div>
       </div>
 
-      {/* User info */}
+      {/* Merchant Code - prominent display */}
       {user && (
-        <div className="p-4 border-b border-gray-200">
-          <div className="flex items-center">
-            <div className="h-9 w-9 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-medium">
-              {user.name.charAt(0) + user.name.split(' ')[1]?.charAt(0)}
-            </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-900">{user.name}</p>
-              <p className="text-xs text-gray-500">{user.businessName}</p>
-            </div>
+        <div className="p-4 border-b border-gray-200 flex flex-col items-center">
+          <div className="bg-gradient-to-r from-primary-400 to-primary-700 shadow-lg rounded-xl px-6 py-4 flex flex-col items-center w-full animate-pulse-slow">
+            <span className="text-xs font-semibold text-white uppercase tracking-widest mb-1">Merchant Code</span>
+            <span className="text-3xl font-mono font-bold text-white tracking-widest drop-shadow-lg select-all">23456</span>
           </div>
         </div>
       )}
@@ -104,22 +103,15 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
               Support
             </h3>
           </div>
-          {secondaryNavigation.map((item) => {
-            const isActive = location.pathname === item.href;
-            return (
-              <NavLink
-                key={item.name}
-                to={item.href}
-                className={navItemClasses(isActive)}
-                onClick={handleClick}
-              >
-                <item.icon 
-                  className={`mr-3 h-5 w-5 ${isActive ? 'text-primary-600' : 'text-gray-500'}`} 
-                />
-                {item.name}
-              </NavLink>
-            );
-          })}
+          {secondaryNavigation.map((item) => (
+            <div
+              key={item.name}
+              className="flex items-center px-4 py-2 my-1 text-sm font-medium rounded-md text-gray-400 bg-gray-50 opacity-60 cursor-not-allowed"
+            >
+              <item.icon className="mr-3 h-5 w-5 text-gray-300" />
+              {item.name}
+            </div>
+          ))}
         </div>
       </nav>
 

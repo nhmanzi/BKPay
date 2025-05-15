@@ -30,10 +30,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Mock successful login
       setUser({
         id: '123',
-        name: 'John Merchant',
-        email,
+        name: 'Ngabo Bright',
+        email:'ngabo@gmail.com',
         role: 'merchant',
-        businessName: 'Acme Store'
+        businessName: 'KGL fits store'
       });
     } catch (error) {
       console.error('Login failed:', error);

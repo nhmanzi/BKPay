@@ -3,14 +3,14 @@ import { ArrowUpDown, ChevronDown, Filter, Search, ArrowDown, ArrowUp, MoreHoriz
 import { format } from 'date-fns';
 
 const transfersData = [
-  { id: 'TR-001', type: 'deposit', amount: 5000.00, status: 'completed', date: '2023-04-23', source: 'Bank Account' },
-  { id: 'TR-002', type: 'withdrawal', amount: 1200.00, status: 'pending', date: '2023-04-22', destination: 'Bank Account' },
-  { id: 'TR-003', type: 'deposit', amount: 3500.00, status: 'completed', date: '2023-04-21', source: 'Credit Card' },
-  { id: 'TR-004', type: 'withdrawal', amount: 800.00, status: 'completed', date: '2023-04-20', destination: 'Bank Account' },
-  { id: 'TR-005', type: 'deposit', amount: 1200.00, status: 'failed', date: '2023-04-19', source: 'Bank Account' },
-  { id: 'TR-006', type: 'withdrawal', amount: 2500.00, status: 'completed', date: '2023-04-18', destination: 'Bank Account' },
-  { id: 'TR-007', type: 'deposit', amount: 4200.00, status: 'completed', date: '2023-04-17', source: 'Credit Card' },
-  { id: 'TR-008', type: 'withdrawal', amount: 1800.00, status: 'pending', date: '2023-04-16', destination: 'Bank Account' },
+  { id: 'TR-001', type: 'deposit', amount: 5000000, status: 'completed', date: '2023-04-23', source: 'Bank Account', customer: 'Jean Claude' },
+  { id: 'TR-002', type: 'withdrawal', amount: 1200000, status: 'pending', date: '2023-04-22', destination: 'Bank Account', customer: 'Marie Claire' },
+  { id: 'TR-003', type: 'deposit', amount: 3500000, status: 'completed', date: '2023-04-21', source: 'Credit Card', customer: 'Emmanuel' },
+  { id: 'TR-004', type: 'withdrawal', amount: 800000, status: 'completed', date: '2023-04-20', destination: 'Bank Account', customer: 'Grace' },
+  { id: 'TR-005', type: 'deposit', amount: 1200000, status: 'failed', date: '2023-04-19', source: 'Bank Account', customer: 'Patrick' },
+  { id: 'TR-006', type: 'withdrawal', amount: 2500000, status: 'completed', date: '2023-04-18', destination: 'Bank Account', customer: 'Chantal' },
+  { id: 'TR-007', type: 'deposit', amount: 4200000, status: 'completed', date: '2023-04-17', source: 'Credit Card', customer: 'David' },
+  { id: 'TR-008', type: 'withdrawal', amount: 1800000, status: 'pending', date: '2023-04-16', destination: 'Bank Account', customer: 'Josiane' }
 ];
 
 const Transfers = () => {
@@ -300,7 +300,7 @@ const Transfers = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">RWF {transfer.amount.toFixed(2)}</div>
+                    <div className="text-sm text-gray-900">RWF {transfer.amount.toLocaleString()}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeColor(transfer.status)}`}>

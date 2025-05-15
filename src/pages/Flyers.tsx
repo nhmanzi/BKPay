@@ -16,6 +16,7 @@ import {
   Calendar,
   ArrowUpDown
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const flyersData = [
   { id: 1, name: 'Summer Sale', template: 'Promotion', status: 'active', created: '2023-04-23', lastEdited: '2023-04-25', thumbnail: 'https://images.pexels.com/photos/3184430/pexels-photo-3184430.jpeg?auto=compress&cs=tinysrgb&w=600' },
@@ -27,10 +28,31 @@ const flyersData = [
 ];
 
 const templates = [
-  { id: 1, name: 'Promotion', description: 'Perfect for sales and special offers', thumbnail: 'https://images.pexels.com/photos/5874617/pexels-photo-5874617.jpeg?auto=compress&cs=tinysrgb&w=600' },
-  { id: 2, name: 'Product', description: 'Showcase your products with style', thumbnail: 'https://images.pexels.com/photos/5872357/pexels-photo-5872357.jpeg?auto=compress&cs=tinysrgb&w=600' },
-  { id: 3, name: 'Event', description: 'Promote your upcoming events', thumbnail: 'https://images.pexels.com/photos/5911214/pexels-photo-5911214.jpeg?auto=compress&cs=tinysrgb&w=600' },
-  { id: 4, name: 'Newsletter', description: 'Keep your customers informed', thumbnail: 'https://images.pexels.com/photos/4439444/pexels-photo-4439444.jpeg?auto=compress&cs=tinysrgb&w=600' }
+  {
+    id: 1,
+    name: 'Portrait',
+    description: 'Vertical flyer, ideal for posters and standees',
+    thumbnail: 'https://images.pexels.com/photos/3184430/pexels-photo-3184430.jpeg?auto=compress&cs=tinysrgb&w=400'
+  },
+  {
+    id: 2,
+    name: 'Landscape',
+    description: 'Horizontal flyer, great for banners and wide displays',
+    thumbnail: 'https://images.pexels.com/photos/3184431/pexels-photo-3184431.jpeg?auto=compress&cs=tinysrgb&w=400'
+  },
+  {
+    id: 3,
+    name: 'Circular Table Tent',
+    description: 'Perfect for table tents and circular displays',
+    thumbnail: 'https://images.pexels.com/photos/3184432/pexels-photo-3184432.jpeg?auto=compress&cs=tinysrgb&w=400'
+  },
+  {
+    id: 4,
+    name: 'Start from Scratch',
+    description: 'Create a flyer from a blank canvas',
+    thumbnail: '', // Will use a custom icon instead of an image
+    isScratch: true
+  }
 ];
 
 const Flyers = () => {
@@ -39,6 +61,7 @@ const Flyers = () => {
   const [templateFilter, setTemplateFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
   const [showNewFlyerModal, setShowNewFlyerModal] = useState(false);
+  const navigate = useNavigate();
   
   const filteredFlyers = flyersData.filter(flyer => {
     const matchesSearch = 
@@ -78,89 +101,92 @@ const Flyers = () => {
 
       {/* Templates Gallery (when modal is open) */}
       {showNewFlyerModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-5xl sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="w-full">
-                    <div className="flex justify-between items-center mb-6">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">
-                        Choose a Template
-                      </h3>
-                      <button
-                        type="button"
-                        className="text-gray-400 hover:text-gray-500"
-                        onClick={() => setShowNewFlyerModal(false)}
+        <div className="fixed inset-0 z-50 flex items-center justify-center min-h-screen bg-transparent">
+          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div className="absolute inset-0 bg-white opacity-85"></div>
+          </div>
+          <div className="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-5xl w-full mx-4" style={{ boxShadow:'22px 12px 99.3px 6px rgba(94, 95, 136, 0.10)',border:'1px solid #E5E7EB' }}>
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div className="sm:flex sm:items-start">
+                <div className="w-full">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                      Choose a Template
+                    </h3>
+                    <button
+                      type="button"
+                      className="text-gray-400 hover:text-gray-500"
+                      onClick={() => setShowNewFlyerModal(false)}
+                    >
+                      <span className="sr-only">Close</span>
+                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    {templates.map((template) => (
+                      <div
+                        key={template.id}
+                        className="group relative rounded-lg overflow-hidden border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all cursor-pointer flex flex-col"
                       >
-                        <span className="sr-only">Close</span>
-                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                      {templates.map((template) => (
-                        <div
-                          key={template.id}
-                          className="group relative rounded-lg overflow-hidden border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all cursor-pointer"
-                        >
-                          <div className="aspect-w-16 aspect-h-9 w-full overflow-hidden bg-gray-200">
-                            <img
-                              src={template.thumbnail}
-                              alt={template.name}
-                              className="w-full h-40 object-cover object-center group-hover:opacity-90 transition-opacity"
-                            />
+                        {template.isScratch ? (
+                          <div className="flex flex-col items-center justify-center h-40 bg-gray-50">
+                            <span className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 mb-2">
+                              <Plus className="h-8 w-8 text-primary-600" />
+                            </span>
                           </div>
-                          <div className="p-4">
-                            <h4 className="text-lg font-medium text-gray-900">{template.name}</h4>
-                            <p className="mt-1 text-sm text-gray-500">{template.description}</p>
+                        ) : (
+                          <div className="flex items-center justify-center h-40 bg-gradient-to-br from-primary-50 to-primary-100">
+                            {template.name === 'Portrait' && (
+                              <svg width="56" height="80" viewBox="0 0 56 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="8" width="40" height="64" rx="8" fill="#6366F1" fillOpacity="0.15" />
+                                <rect x="16" y="20" width="24" height="8" rx="2" fill="#6366F1" fillOpacity="0.3" />
+                                <rect x="16" y="36" width="24" height="4" rx="2" fill="#6366F1" fillOpacity="0.2" />
+                                <rect x="16" y="46" width="16" height="4" rx="2" fill="#6366F1" fillOpacity="0.2" />
+                              </svg>
+                            )}
+                            {template.name === 'Landscape' && (
+                              <svg width="80" height="56" viewBox="0 0 80 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="8" width="64" height="40" rx="8" fill="#6366F1" fillOpacity="0.15" />
+                                <rect x="20" y="16" width="32" height="8" rx="2" fill="#6366F1" fillOpacity="0.3" />
+                                <rect x="20" y="30" width="32" height="4" rx="2" fill="#6366F1" fillOpacity="0.2" />
+                                <rect x="20" y="38" width="20" height="4" rx="2" fill="#6366F1" fillOpacity="0.2" />
+                              </svg>
+                            )}
+                            {template.name === 'Circular Table Tent' && (
+                              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="40" cy="40" r="32" fill="#6366F1" fillOpacity="0.12" />
+                                <circle cx="40" cy="40" r="20" fill="#6366F1" fillOpacity="0.18" />
+                                <rect x="28" y="36" width="24" height="8" rx="4" fill="#6366F1" fillOpacity="0.25" />
+                              </svg>
+                            )}
                           </div>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button className="btn btn-primary">
+                        )}
+                        <div className="p-4 flex-1 flex flex-col justify-between">
+                          <h4 className="text-lg font-medium text-gray-900 text-center">{template.name}</h4>
+                          <p className="mt-1 text-sm text-gray-500 text-center">{template.description}</p>
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          {template.isScratch ? (
+                            <button className="btn btn-primary">Start</button>
+                          ) : (
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => navigate(`/table-tent-designer/${template.name.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, '')}`)}
+                            >
                               Use Template
                             </button>
-                          </div>
+                          )}
                         </div>
-                      ))}
-                    </div>
-                    
-                    <div className="mt-8 pt-6 border-t border-gray-200">
-                      <h4 className="text-base font-medium text-gray-900 mb-4">Or start from scratch</h4>
-                      <div className="flex space-x-4">
-                        <button className="bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg border border-gray-200 p-4 flex flex-col items-center">
-                          <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center mb-2">
-                            <Image className="h-6 w-6 text-primary-600" />
-                          </div>
-                          <span className="text-sm font-medium text-gray-900">Blank Design</span>
-                        </button>
-                        
-                        <button className="bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg border border-gray-200 p-4 flex flex-col items-center">
-                          <div className="w-12 h-12 rounded-full bg-secondary-100 flex items-center justify-center mb-2">
-                            <Type className="h-6 w-6 text-secondary-600" />
-                          </div>
-                          <span className="text-sm font-medium text-gray-900">Text Only</span>
-                        </button>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={() => setShowNewFlyerModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
             </div>
+
           </div>
         </div>
       )}

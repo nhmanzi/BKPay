@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Sidebar from '../navigation/Sidebar';
@@ -7,12 +7,60 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import welcomeImg from '../../assets/welcome.png';
+
+type DashboardWelcomeModalProps = {
+  open: boolean;
+  onClose: () => void;
+  merchantName?: string;
+  merchantCode?: string;
+};
+
+const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchantCode = "23456" }: DashboardWelcomeModalProps) => {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.85)' }}>
+      <div className="rounded-2xl bg-white relative w-full max-w-md mx-auto overflow-hidden" style={{ boxShadow:'22px 12px 99.3px 6px rgba(94, 95, 136, 0.10)',border:'1px solid #E5E7EB' }}>
+        <div className="h-48 w-full bg-gray-200 relative">
+          {/* Placeholder image, replace src with actual asset if available */}
+          <img src={welcomeImg} alt="Welcome" className="object-cover w-full h-full" />
+          <button onClick={onClose} className="absolute top-3 right-3 bg-white bg-opacity-80 rounded-full p-1.5 hover:bg-opacity-100 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-700">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div className="p-8 pb-6 text-center">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2 flex items-center justify-center gap-2">Welcome {merchantName} <span className='text-2xl'>🥳</span></h2>
+          <p className="text-gray-500 mb-6">Below is your merchant code</p>
+          <div className="flex justify-center gap-3 mb-6">
+            {merchantCode.split('').map((digit, idx) => (
+              <div key={idx} className="w-12 h-12 flex items-center justify-center rounded-lg border border-gray-200 text-2xl font-medium bg-gray-50">{digit}</div>
+            ))}
+          </div>
+          <div className="flex gap-3 justify-center">
+            <button className="bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg px-6 py-2 transition" onClick={() => {navigator.clipboard.writeText(merchantCode)}}>Copy code</button>
+            <button className="bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 font-medium rounded-lg px-6 py-2 transition">Get brand kit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowWelcome(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-50">
+      {/* Modal for dashboard welcome */}
+      <DashboardWelcomeModal open={showWelcome} onClose={() => setShowWelcome(false)} />
       {/* Mobile sidebar */}
       <div className="lg:hidden">
         <motion.div

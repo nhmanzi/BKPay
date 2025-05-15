@@ -19,17 +19,18 @@ import QRCode from 'qrcode';
 interface NewBillData {
   customerName: string;
   amount: number;
+  phoneNumber: string;
 }
 
 const billsData = [
-  { id: 'INV-001', customer: 'Jane Cooper', email: 'jane.cooper@example.com', amount: 1240.00, status: 'paid', date: '2023-04-23', dueDate: '2023-05-23' },
-  { id: 'INV-002', customer: 'Wade Warren', email: 'wade.warren@example.com', amount: 755.50, status: 'pending', date: '2023-04-22', dueDate: '2023-05-22' },
-  { id: 'INV-003', customer: 'Esther Howard', email: 'esther.howard@example.com', amount: 2340.00, status: 'paid', date: '2023-04-21', dueDate: '2023-05-21' },
-  { id: 'INV-004', customer: 'Cameron Williamson', email: 'cameron.williamson@example.com', amount: 1809.90, status: 'overdue', date: '2023-04-20', dueDate: '2023-05-10' },
-  { id: 'INV-005', customer: 'Brooklyn Simmons', email: 'brooklyn.simmons@example.com', amount: 149.90, status: 'pending', date: '2023-04-19', dueDate: '2023-05-19' },
-  { id: 'INV-006', customer: 'Leslie Alexander', email: 'leslie.alexander@example.com', amount: 1490.00, status: 'paid', date: '2023-04-18', dueDate: '2023-05-18' },
-  { id: 'INV-007', customer: 'Dianne Russell', email: 'dianne.russell@example.com', amount: 568.80, status: 'overdue', date: '2023-04-17', dueDate: '2023-05-01' },
-  { id: 'INV-008', customer: 'Guy Hawkins', email: 'guy.hawkins@example.com', amount: 3200.00, status: 'paid', date: '2023-04-16', dueDate: '2023-05-16' }
+  { id: 'INV-001', customer: 'Jean Claude', email: 'jean.claude@example.com', amount: 1240000, status: 'paid', date: '2023-04-23', dueDate: '2023-05-23' },
+  { id: 'INV-002', customer: 'Marie Claire', email: 'marie.claire@example.com', amount: 755000, status: 'pending', date: '2023-04-22', dueDate: '2023-05-22' },
+  { id: 'INV-003', customer: 'Emmanuel', email: 'emmanuel@example.com', amount: 2340000, status: 'paid', date: '2023-04-21', dueDate: '2023-05-21' },
+  { id: 'INV-004', customer: 'Grace', email: 'grace@example.com', amount: 1809000, status: 'overdue', date: '2023-04-20', dueDate: '2023-05-10' },
+  { id: 'INV-005', customer: 'Patrick', email: 'patrick@example.com', amount: 149000, status: 'pending', date: '2023-04-19', dueDate: '2023-05-19' },
+  { id: 'INV-006', customer: 'Chantal', email: 'chantal@example.com', amount: 1490000, status: 'paid', date: '2023-04-18', dueDate: '2023-05-18' },
+  { id: 'INV-007', customer: 'David', email: 'david@example.com', amount: 568000, status: 'overdue', date: '2023-04-17', dueDate: '2023-05-01' },
+  { id: 'INV-008', customer: 'Josiane', email: 'josiane@example.com', amount: 3200000, status: 'paid', date: '2023-04-16', dueDate: '2023-05-16' }
 ];
 
 const Bills = () => {
@@ -39,7 +40,8 @@ const Bills = () => {
   const [showNewBillModal, setShowNewBillModal] = useState(false);
   const [newBillData, setNewBillData] = useState<NewBillData>({
     customerName: '',
-    amount: 0
+    amount: 0,
+    phoneNumber: '',
   });
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -78,14 +80,9 @@ const Bills = () => {
   const handleCreateBill = async () => {
     setIsGenerating(true);
     const billId = `INV-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
-    
     try {
-      const qrData = JSON.stringify({
-        billId,
-        amount: newBillData.amount,
-        customerName: newBillData.customerName
-      });
-      
+      // Generate the QR code string in the required format
+      const qrData = `tel:*334*8*1*11078288*${newBillData.amount}#`;
       const qrCodeDataUrl = await QRCode.toDataURL(qrData);
       setQrCodeUrl(qrCodeDataUrl);
     } catch (err) {
@@ -116,8 +113,8 @@ const Bills = () => {
 
       {/* New Bill Modal */}
       {showNewBillModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <div className="fixed inset-0 bg-white bg-opacity-85 flex items-center justify-center z-50">
+          <div className="bg-white  shadow-md rounded-lg p-6 w-full max-w-md" style={{ boxShadow:'22px 12px 99.3px 6px rgba(94, 95, 136, 0.10)',border:'1px solid #E5E7EB' }}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Create New Bill</h2>
               <button 
@@ -150,17 +147,30 @@ const Bills = () => {
                   Amount
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-2 text-gray-500">RWF</span>
+                  <span className="absolute left-2 top-2 text-gray-500">RFW</span>
                   <input
                     type="number"
                     value={newBillData.amount || ''}
                     onChange={(e) => setNewBillData(prev => ({ ...prev, amount: parseFloat(e.target.value) }))}
-                    className="input w-full pl-7"
+                    className="input w-full pl-[48px]"
                     placeholder="0.00"
                     min="0"
                     step="0.01"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  value={newBillData.phoneNumber}
+                  onChange={(e) => setNewBillData(prev => ({ ...prev, phoneNumber: e.target.value }))}
+                  className="input w-full"
+                  placeholder="Enter phone number"
+                />
               </div>
 
               {qrCodeUrl ? (
@@ -191,7 +201,7 @@ const Bills = () => {
                       onClick={() => {
                         setShowNewBillModal(false);
                         setQrCodeUrl(null);
-                        setNewBillData({ customerName: '', amount: 0 });
+                        setNewBillData({ customerName: '', amount: 0, phoneNumber: '' });
                       }}
                     >
                       Done
@@ -202,7 +212,7 @@ const Bills = () => {
                 <button
                   className="btn btn-primary w-full"
                   onClick={handleCreateBill}
-                  disabled={isGenerating || !newBillData.customerName || !newBillData.amount}
+                  disabled={isGenerating || !newBillData.customerName || !newBillData.amount || !newBillData.phoneNumber}
                 >
                   {isGenerating ? (
                     <>
@@ -359,7 +369,7 @@ const Bills = () => {
                     <div className="text-sm text-gray-500">{bill.email}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">RWF {bill.amount.toFixed(2)}</div>
+                    <div className="text-sm text-gray-900">RWF {bill.amount.toLocaleString()}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeColor(bill.status)}`}>
