@@ -43,17 +43,17 @@ const recentTransactions = [
 
 const Dashboard = () => {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 px-2 sm:px-4 md:px-6 lg:px-8 w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-        <div className="flex items-center space-x-4">
-          <select className="rounded-md border-gray-300 text-sm bg-white py-1.5 px-3 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+        <div className="flex flex-row xs:flex-col xs:items-center gap-4 xs:gap-4 w-full sm:w-auto">
+          <select className="rounded-md border-gray-300 text-sm bg-white py-1.5 px-3 shadow-sm focus:border-primary-500 focus:ring-primary-500 w-full xs:w-auto">
             <option>Last 7 days</option>
             <option>Last 30 days</option>
             <option>Last 3 months</option>
             <option>Last year</option>
           </select>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary w-full xs:w-auto">
             <BarChart3 className="h-4 w-4 mr-2" />
             Reports
           </button>
@@ -61,7 +61,7 @@ const Dashboard = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
           <div className="p-5">
             <div className="flex items-center">
@@ -152,7 +152,7 @@ const Dashboard = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center justify-between p-5 border-b border-gray-200">
             <h3 className="text-base font-semibold text-gray-900">Revenue Overview</h3>
@@ -164,8 +164,8 @@ const Dashboard = () => {
               </select>
             </div>
           </div>
-          <div className="p-5">
-            <div className="h-80">
+          <div className="p-4 sm:p-5">
+            <div className="h-64 sm:h-80 w-full min-w-0">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
                   data={data}
@@ -205,8 +205,8 @@ const Dashboard = () => {
               </select>
             </div>
           </div>
-          <div className="p-5">
-            <div className="h-80">
+          <div className="p-4 sm:p-5">
+            <div className="h-64 sm:h-80 w-full min-w-0">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={data}
@@ -226,28 +226,28 @@ const Dashboard = () => {
 
       {/* Recent Transactions */}
       <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-3 sm:px-5 py-4 border-b border-gray-200 gap-2">
           <h3 className="text-base font-semibold text-gray-900">Recent Transactions</h3>
           <a href="/payments" className="text-sm font-medium text-primary-600 hover:text-primary-700 flex items-center">
             View all
             <ChevronRight className="h-4 w-4 ml-1" />
           </a>
         </div>
-        <div className="p-3">
+        <div className="p-2 sm:p-3">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full divide-y divide-gray-200 text-sm">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Customer
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Amount
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Date
                   </th>
                 </tr>
@@ -255,17 +255,17 @@ const Dashboard = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {recentTransactions.map((transaction) => (
                   <tr key={transaction.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
                         {transaction.customer}
                       </div>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
                         RWF {transaction.amount.toFixed(2)}
                       </div>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         transaction.status === 'completed' 
                           ? 'bg-success-100 text-success-800' 
@@ -276,7 +276,7 @@ const Dashboard = () => {
                         {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                       {transaction.date}
                     </td>
                   </tr>

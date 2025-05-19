@@ -19,7 +19,7 @@ type DashboardWelcomeModalProps = {
 const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchantCode = "23456" }: DashboardWelcomeModalProps) => {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.85)' }}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.85)' }}>
       <div className="rounded-2xl bg-white relative w-full max-w-md mx-auto overflow-hidden" style={{ boxShadow:'22px 12px 99.3px 6px rgba(94, 95, 136, 0.10)',border:'1px solid #E5E7EB' }}>
         <div className="h-48 w-full bg-gray-200 relative">
           {/* Placeholder image, replace src with actual asset if available */}
@@ -58,18 +58,18 @@ const DashboardLayout = () => {
   }, []);
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 overflow-x-hidden w-full">
       {/* Modal for dashboard welcome */}
       <DashboardWelcomeModal open={showWelcome} onClose={() => setShowWelcome(false)} />
       {/* Mobile sidebar */}
       <div className="lg:hidden">
-        <motion.div
-          initial={false}
-          animate={sidebarOpen ? "open" : "closed"}
-          className="fixed inset-0 z-40 flex"
-        >
-          {/* Backdrop */}
-          {sidebarOpen && (
+        {sidebarOpen && (
+          <motion.div
+            initial={false}
+            animate={sidebarOpen ? "open" : "closed"}
+            className="fixed inset-0 z-50 flex"
+          >
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -78,50 +78,55 @@ const DashboardLayout = () => {
               className="fixed inset-0 bg-gray-600 bg-opacity-75"
               onClick={() => setSidebarOpen(false)}
             />
-          )}
 
-          {/* Sidebar */}
-          <motion.div
-            variants={{
-              open: { x: 0 },
-              closed: { x: "-100%" }
-            }}
-            transition={{ duration: 0.2 }}
-            className="relative flex w-full max-w-xs flex-1 flex-col bg-white"
-          >
-            <div className="absolute top-0 right-0 pt-4 pr-4">
-              <button
-                className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
-                onClick={() => setSidebarOpen(false)}
-              >
-                <X className="h-6 w-6 text-gray-600" />
-              </button>
-            </div>
-            <Sidebar mobile closeSidebar={() => setSidebarOpen(false)} />
+            {/* Sidebar below header */}
+            <motion.div
+              variants={{
+                open: { x: 0 },
+                closed: { x: "-100%" }
+              }}
+              transition={{ duration: 0.2 }}
+              className="relative flex w-full max-w-xs flex-1 flex-col bg-white mt-16 h-[calc(100vh-4rem)]"
+              style={{ top: 0 }}
+            >
+              <div className="absolute top-0 right-0 pt-4 pr-4">
+                <button
+                  className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <X className="h-6 w-6 text-gray-600" />
+                </button>
+              </div>
+              <Sidebar mobile closeSidebar={() => setSidebarOpen(false)} />
+            </motion.div>
           </motion.div>
-        </motion.div>
+        )}
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:flex lg:flex-shrink-0">
-        <div className="flex w-64 flex-col">
+      <div className="hidden lg:block">
+        <div className="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 z-30 flex flex-col">
           <Sidebar />
         </div>
       </div>
 
       {/* Main content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Header>
-          <button
-            className="lg:hidden -ml-0.5 -mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="h-6 w-6" />
-          </button>
-        </Header>
-
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6 lg:p-8">
-          <Outlet />
+      <div className="flex flex-1 flex-col min-h-screen w-full lg:ml-64">
+        {/* Fixed header on mobile/tablet */}
+        <div className="bg-white border-b border-gray-100 z-50 fixed top-0 left-0 w-full h-16 lg:static lg:h-auto">
+          <Header>
+            <button
+              className="lg:hidden -ml-0.5 -mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+              onClick={() => { console.log('Burger menu clicked'); setSidebarOpen(true); }}
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </Header>
+        </div>
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6 lg:p-8 w-full pt-16 lg:pt-0">
+          <div className="max-w-[1400px] mx-auto pt-8">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

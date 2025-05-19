@@ -71,16 +71,16 @@ const Payments = () => {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 px-2 sm:px-4 md:px-6 lg:px-8 w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-semibold text-gray-900">Payments</h1>
-        <div className="flex items-center space-x-4">
-          <button className="btn btn-outline">
+        <div className="flex flex-col xs:flex-row xs:items-center gap-2 xs:gap-4 w-full sm:w-auto">
+          <button className="btn btn-outline w-full xs:w-auto">
             <Download className="h-4 w-4 mr-2" />
             Export
           </button>
           <button 
-            className="btn btn-primary hidden"
+            className="btn btn-primary hidden w-full xs:w-auto"
             onClick={() => setShowNewPaymentModal(true)}
           >
             + New Payment
@@ -190,7 +190,7 @@ const Payments = () => {
       )}
 
       {/* Filters */}
-      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 p-5">
+      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 p-4 sm:p-5">
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -243,9 +243,9 @@ const Payments = () => {
       </div>
 
       {/* Payments Table */}
-      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 hidden md:block">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full divide-y divide-gray-200 text-sm">
             <thead className="bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -339,12 +339,12 @@ const Payments = () => {
             </tbody>
           </table>
         </div>
-        <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+        <div className="bg-white px-2 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
           <div className="flex-1 flex justify-between md:hidden">
-            <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+            <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 w-full mr-2">
               Previous
             </button>
-            <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+            <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 w-full ml-2">
               Next
             </button>
           </div>
@@ -390,6 +390,62 @@ const Payments = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Cards for mobile */}
+      <div className="block md:hidden">
+        {filteredPayments.map((payment) => (
+          <div key={payment.id} className="rounded-xl bg-white shadow p-4 mb-4 border">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-semibold text-primary-600">#{payment.id}</span>
+              <button className="text-gray-500 hover:text-gray-700">
+                <MoreHorizontal className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-gray-500">Customer</span>
+              <span className="font-semibold text-gray-900">{payment.customer}</span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-gray-500">Email</span>
+              <span className="text-gray-900">{payment.email}</span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-gray-500">Amount</span>
+              <span className="font-semibold text-gray-900">RWF {payment.amount.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-gray-500">Status</span>
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                payment.status === 'completed' 
+                  ? 'bg-success-100 text-success-800' 
+                  : payment.status === 'processing' 
+                    ? 'bg-warning-100 text-warning-800' 
+                    : 'bg-error-100 text-error-800'
+              }`}>
+                {payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+              </span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-gray-500">Date</span>
+              <span className="text-gray-900">{new Date(payment.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })}</span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-gray-500">Type</span>
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                payment.type === 'credit' 
+                  ? 'bg-primary-100 text-primary-800' 
+                  : 'bg-secondary-100 text-secondary-800'
+              }`}>
+                {payment.type.charAt(0).toUpperCase() + payment.type.slice(1)}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

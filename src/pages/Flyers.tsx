@@ -87,7 +87,7 @@ const Flyers = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-2 sm:px-4 md:px-6 lg:px-8 w-full">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-gray-900">Marketing Flyers</h1>
         <button 

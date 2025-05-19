@@ -10,7 +10,7 @@ const Header = ({ children }: HeaderProps) => {
   const { user } = useAuth();
 
   return (
-    <header className="bg-white border-b border-gray-200 z-10">
+    <header className="sticky top-0 z-20 bg-white">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">

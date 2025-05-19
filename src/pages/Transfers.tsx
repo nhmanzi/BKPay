@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowUpDown, ChevronDown, Filter, Search, ArrowDown, ArrowUp, MoreHorizontal, Calendar, Wallet, CreditCard, Ban as Bank } from 'lucide-react';
 import { format } from 'date-fns';
+import ResponsiveDataCard from '../components/common/ResponsiveDataCard';
 
 const transfersData = [
   { id: 'TR-001', type: 'deposit', amount: 5000000, status: 'completed', date: '2023-04-23', source: 'Bank Account', customer: 'Jean Claude' },
@@ -50,7 +51,7 @@ const Transfers = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-2 sm:px-4 md:px-6 lg:px-8 w-full">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-gray-900">Transfers</h1>
         <button 
@@ -257,7 +258,7 @@ const Transfers = () => {
       )}
 
       {/* Transfers Table */}
-      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 hidden md:block">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -387,6 +388,31 @@ const Transfers = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Cards for mobile */}
+      <div className="block md:hidden">
+        {filteredTransfers.map((transfer) => (
+          <ResponsiveDataCard
+            key={transfer.id}
+            header={transfer.id}
+            actions={
+              <button className="text-gray-400 hover:text-gray-700">
+                <MoreHorizontal className="h-5 w-5" />
+              </button>
+            }
+            rows={[
+              { label: 'Type', value: <span className="flex items-center">{getTypeIcon(transfer.type)}<span className="ml-2 capitalize">{transfer.type}</span></span> },
+              { label: 'Amount', value: `RWF ${transfer.amount.toLocaleString()}` },
+              { label: 'Status', value: transfer.status.charAt(0).toUpperCase() + transfer.status.slice(1), badgeClass: `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeColor(transfer.status)}` },
+              { label: 'Date', value: new Date(transfer.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) },
+              { label: 'Details', value: transfer.type === 'deposit'
+                ? <span className="flex items-center">{transfer.source === 'Bank Account' ? <Bank className="h-4 w-4 mr-1 text-gray-400" /> : <CreditCard className="h-4 w-4 mr-1 text-gray-400" />}<span>From: {transfer.source}</span></span>
+                : <span className="flex items-center"><Bank className="h-4 w-4 mr-1 text-gray-400" /><span>To: {transfer.destination}</span></span>
+              },
+            ]}
+          />
+        ))}
       </div>
     </div>
   );

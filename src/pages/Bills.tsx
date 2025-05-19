@@ -15,6 +15,7 @@ import {
   Loader2
 } from 'lucide-react';
 import QRCode from 'qrcode';
+import ResponsiveDataCard from '../components/common/ResponsiveDataCard';
 
 interface NewBillData {
   customerName: string;
@@ -312,7 +313,7 @@ const Bills = () => {
       </div>
 
       {/* Bills Table */}
-      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 hidden md:block">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -419,67 +420,40 @@ const Bills = () => {
             </tbody>
           </table>
         </div>
-        <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-          <div className="hidden md:flex-1 md:flex md:items-center md:justify-between">
-            <div>
-              <p className="text-sm text-gray-700">
-                Showing <span className="font-medium">1</span> to <span className="font-medium">8</span> of{' '}
-                <span className="font-medium">124</span> results
-              </p>
-            </div>
-            <div>
-              <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                <a
-                  href="#"
-                  className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                >
-                  <span className="sr-only">Previous</span>
-                  <ChevronDown className="h-5 w-5 transform rotate-90" />
-                </a>
-                <a
-                  href="#"
-                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-primary-50 text-sm font-medium text-primary-600"
-                >
-                  1
-                </a>
-                <a
-                  href="#"
-                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  2
-                </a>
-                <a
-                  href="#"
-                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  3
-                </a>
-                <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                  ...
-                </span>
-                <a
-                  href="#"
-                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  15
-                </a>
-                <a
-                  href="#"
-                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  16
-                </a>
-                <a
-                  href="#"
-                  className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                >
-                  <span className="sr-only">Next</span>
-                  <ChevronDown className="h-5 w-5 transform -rotate-90" />
-                </a>
-              </nav>
-            </div>
-          </div>
-        </div>
+      </div>
+
+      {/* Cards for mobile */}
+      <div className="block md:hidden">
+        {filteredBills.map((bill) => (
+          <ResponsiveDataCard
+            key={bill.id}
+            header={bill.id}
+            actions={
+              <div className="flex items-center space-x-2">
+                <button className="text-gray-600 hover:text-gray-900">
+                  <Eye className="h-5 w-5" />
+                </button>
+                <button className="text-gray-600 hover:text-gray-900">
+                  <DownloadIcon className="h-5 w-5" />
+                </button>
+                <button className="text-gray-600 hover:text-gray-900">
+                  <Printer className="h-5 w-5" />
+                </button>
+                <button className="text-gray-600 hover:text-gray-900">
+                  <MoreVertical className="h-5 w-5" />
+                </button>
+              </div>
+            }
+            rows={[
+              { label: 'Customer', value: bill.customer },
+              { label: 'Email', value: bill.email },
+              { label: 'Amount', value: `RWF ${bill.amount.toLocaleString()}` },
+              { label: 'Status', value: bill.status.charAt(0).toUpperCase() + bill.status.slice(1), badgeClass: `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeColor(bill.status)}` },
+              { label: 'Issue Date', value: new Date(bill.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) },
+              { label: 'Due Date', value: new Date(bill.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) },
+            ]}
+          />
+        ))}
       </div>
     </div>
   );
