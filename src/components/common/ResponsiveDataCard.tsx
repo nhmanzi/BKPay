@@ -13,7 +13,7 @@ interface ResponsiveDataCardProps {
 }
 
 const ResponsiveDataCard: React.FC<ResponsiveDataCardProps> = ({ header, rows, actions }) => (
-  <div className="rounded-xl bg-white shadow p-4 mb-4 border">
+  <div className="rounded-xl bg-white shadow-sm p-4 mb-4 border">
     <div className="flex items-center justify-between mb-2">
       <span className="font-semibold text-primary-600">{header}</span>
       {actions && <div>{actions}</div>}
@@ -24,7 +24,7 @@ const ResponsiveDataCard: React.FC<ResponsiveDataCardProps> = ({ header, rows, a
         {row.badgeClass ? (
           <span className={row.badgeClass}>{row.value}</span>
         ) : (
-          <span className="font-semibold text-gray-900">{row.value}</span>
+          <span className="font-medium text-gray-900">{row.value}</span>
         )}
       </div>
     ))}

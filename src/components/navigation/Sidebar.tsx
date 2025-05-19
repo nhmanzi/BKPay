@@ -29,7 +29,7 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
     { name: 'Bills', href: '/bills', icon: Receipt },
     { name: 'Transfers', href: '/transfers', icon: ArrowRightLeft },
     { name: 'Request Loan', href: '/request-loan', icon: HandCoins },
-    { name: 'Brand kit', href: '/flyers', icon: Megaphone },
+    { name: 'Brand kits', href: '/flyers', icon: Megaphone },
   ];
 
   const secondaryNavigation = [

@@ -286,7 +286,7 @@ const Onboarding = () => {
             <h3 className="text-2xl font-semibold text-gray-900">Enter OTP sent on your email</h3>
             <div>
            
-              <div className="flex space-x-8 justify-left mt-2">
+              <div className="flex space-x-2 lg:space-x-8 justify-left mt-2">
                 {otpDigits.map((digit, idx) => (
                   <input
                     key={idx}
@@ -338,7 +338,8 @@ const Onboarding = () => {
   // Progress indicator
   const renderProgress = () => (
     <div className="w-full max-w-2xl mx-auto mt-8 mb-10">
-      <div className="flex justify-between items-center">
+      {/* Desktop Progress */}
+      <div className="hidden md:flex justify-between items-center">
         {steps.map((label, idx) => {
           const isActive = step === idx + 1;
           const isCompleted = step > idx + 1;
@@ -362,25 +363,52 @@ const Onboarding = () => {
           );
         })}
       </div>
+
+      {/* Mobile Progress */}
+      <div className="md:hidden">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <span className="text-sm font-medium text-gray-500">Step {step} of {totalSteps}</span>
+          </div>
+          <span className="text-sm font-medium text-primary-600">{steps[step - 1]}</span>
+        </div>
+        <div className="relative">
+          <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
+            <div 
+              style={{ width: `${(step / totalSteps) * 100}%` }}
+              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary-600 transition-all duration-500"
+            ></div>
+          </div>
+          <div className="flex justify-between mt-2">
+            {steps.map((_, idx) => (
+              <div
+                key={idx}
+                className={`w-2 h-2 rounded-full ${
+                  idx + 1 <= step ? 'bg-primary-600' : 'bg-gray-300'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-between w-[30rem]">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-between w-full max-w-[30rem] mx-auto px-4 sm:px-6">
       {/* Top logo and title */}
-      <div className="w-full flex flex-col items-center pt-12">
-        <div className="flex items-center mb-6">
-          <span className=" text-primary-600 font-bold rounded-full px-3 py-1 text-2xl mr-2">
-            <img src={BKPayLogo} alt="BKPay Logo" className="h-12 w-auto" />
+      <div className="w-full flex flex-col items-center pt-6 sm:pt-12">
+        <div className="flex items-center mb-4 sm:mb-6">
+          <span className="text-primary-600 font-bold rounded-full px-3 py-1 text-2xl mr-2">
+            <img src={BKPayLogo} alt="BKPay Logo" className="h-10 sm:h-12 w-auto" />
           </span>
-
         </div>
-        <h1 className="text-2xl md:text-3xl font-semibold text-gray-700 mb-2">Become a merchant</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-700 mb-2 text-center">Become a merchant</h1>
         {renderProgress()}
       </div>
       {/* Form section */}
-      <div className="flex-1 flex flex-col items-center justify-start">
-        <div className="w-full max-w-2xl mx-auto">
+      <div className="flex-1 flex flex-col items-center justify-start w-full">
+        <div className="w-full">
           <form onSubmit={handleSubmit(onSubmit)} className="mt-2">
             {renderStep()}
             <div className="mt-8 flex justify-end">
@@ -395,7 +423,7 @@ const Onboarding = () => {
               )}
               <button
                 type="submit"
-                className="px-8 py-3 rounded-md bg-primary-600 text-white font-medium text-base hover:bg-primary-700 transition-colors shadow-sm flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 rounded-md bg-primary-600 text-white font-medium text-base hover:bg-primary-700 transition-colors shadow-sm flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isSubmitting || (step === 2 && (!selectedAccount || isLoadingAccounts))}
               >
                 {isSubmitting ? (
@@ -416,8 +444,8 @@ const Onboarding = () => {
         </div>
       </div>
       {/* Bottom link */}
-      <div className="w-full text-center pb-10">
-        <p className="text-gray-500 text-base">
+      <div className="w-full text-center py-6 sm:py-10">
+        <p className="text-gray-500 text-sm sm:text-base">
           Already a merchant ?{' '}
           <a href="/login" className="text-primary-600 hover:underline">Sign up</a>
         </p>
