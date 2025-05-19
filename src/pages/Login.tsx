@@ -3,7 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import {  Mail, Lock, Loader2 } from 'lucide-react';
-import BKPayLogo from '../assets/BKPAY.svg';
+const BKPayLogo = '/assets/BKPAY.svg';
+
 interface LoginFormData {
   email: string;
   password: string;

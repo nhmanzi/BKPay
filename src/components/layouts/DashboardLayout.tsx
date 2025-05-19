@@ -7,7 +7,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
-import welcomeImg from '../../assets/welcome.png';
+const welcomeImg = '/assets/welcome.png';
 
 type DashboardWelcomeModalProps = {
   open: boolean;

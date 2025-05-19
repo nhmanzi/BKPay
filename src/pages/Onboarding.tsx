@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Check, CreditCard, Building, Map, Phone, Mail, Users, ChevronRight, Loader2, Lock, Key } from 'lucide-react';
-import BKPayLogo from '../assets/BKPAY.svg';
+const BKPayLogo = '/assets/BKPAY.svg';
 import { useAuth } from '../contexts/AuthContext';
 
 interface OnboardingFormData {

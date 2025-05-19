@@ -12,7 +12,8 @@ import {
   LogOut,
   HandCoins
 } from 'lucide-react';
-import BKPayLogo from '../../assets/BKPAY.svg';
+const BKPayLogo = '/assets/BKPAY.svg';
+
 interface SidebarProps {
   mobile?: boolean;
   closeSidebar?: () => void;
@@ -106,7 +107,7 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
           {secondaryNavigation.map((item) => (
             <div
               key={item.name}
-              className="flex items-center px-4 py-2 my-1 text-sm font-medium rounded-md text-gray-400 bg-gray-50 opacity-60 cursor-not-allowed"
+              className="flex items-center px-4 py-2 my-1 text-sm font-medium rounded-md text-gray-400 bg-gray-50  cursor-not-allowed"
             >
               <item.icon className="mr-3 h-5 w-5 text-gray-300" />
               {item.name}

@@ -5,7 +5,7 @@ import jsPDF from 'jspdf';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, Stage } from '@react-three/drei';
 import * as THREE from 'three'
-import Template1 from '../assets/Template1.png';
+const Template1 = '/assets/Template1.png';
 
 const gradients = [
   {
