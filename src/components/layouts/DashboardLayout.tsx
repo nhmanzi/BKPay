@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Sidebar from '../navigation/Sidebar';
 import Header from '../navigation/Header';
 import { 
   Menu,
-  X
+  X,
+  Check
 } from 'lucide-react';
 const welcomeImg = '/assets/welcome.png';
 
@@ -17,6 +18,15 @@ type DashboardWelcomeModalProps = {
 };
 
 const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchantCode = "23456" }: DashboardWelcomeModalProps) => {
+  const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(merchantCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.85)' }}>
@@ -39,8 +49,20 @@ const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchant
             ))}
           </div>
           <div className="flex gap-3 justify-center">
-            <button className="bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg px-6 py-2 transition" onClick={() => {navigator.clipboard.writeText(merchantCode)}}>Copy code</button>
-            <button className="bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 font-medium rounded-lg px-6 py-2 transition">Get brand kit</button>
+            <button
+              className={`font-medium rounded-lg px-6 py-2 transition flex items-center justify-center gap-2 ${copied ? 'bg-white text-green-600 shadow border border-green-100' : 'bg-primary-600 hover:bg-primary-700 text-white'}`}
+              onClick={handleCopy}
+              disabled={copied}
+            >
+              {copied ? <><Check className="w-5 h-5 text-green-600" />Copied</> : 'Copy code'}
+            </button>
+            <button
+              className="bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 font-medium rounded-lg px-6 py-2 transition"
+              onClick={() => {
+                onClose();
+                setTimeout(() => navigate('/flyers'), 200);
+              }}
+            >Get brand kit</button>
           </div>
         </div>
       </div>
