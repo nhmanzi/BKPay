@@ -53,8 +53,9 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
 
   return (
     <div
-      className="flex flex-col h-full border-r border-gray-200 bg-gray-900/85"
+      className="flex flex-col h-full"
       style={{
+        backgroundColor:'#061525',
         backgroundImage: `url(${SidebarBg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
