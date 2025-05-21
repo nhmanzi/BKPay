@@ -29,8 +29,8 @@ const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchant
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.85)' }}>
-      <div className="rounded-2xl bg-white relative w-full max-w-md mx-auto overflow-hidden" style={{ boxShadow:'22px 12px 99.3px 6px rgba(94, 95, 136, 0.10)',border:'1px solid #E5E7EB' }}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-80" >
+      <div className="rounded-2xl bg-white relative w-full max-w-md mx-auto overflow-hidden" >
         <div className="h-48 w-full bg-gray-200 relative">
           {/* Placeholder image, replace src with actual asset if available */}
           <img src={welcomeImg} alt="Welcome" className="object-cover w-full h-full" />

@@ -114,7 +114,7 @@ const Bills = () => {
 
       {/* New Bill Modal */}
       {showNewBillModal && (
-        <div className="fixed inset-0 bg-white bg-opacity-85 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
           <div className="bg-white  shadow-md rounded-lg p-6 w-full max-w-md" style={{ boxShadow:'22px 12px 99.3px 6px rgba(94, 95, 136, 0.10)',border:'1px solid #E5E7EB' }}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Create New Bill</h2>
