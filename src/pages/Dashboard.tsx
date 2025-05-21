@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BarChart3, 
   TrendingUp, 
@@ -22,6 +22,7 @@ import {
   BarChart,
   Bar
 } from 'recharts';
+import ResponsiveDataCard from '../components/ResponsiveDataCard';
 
 const data = [
   { name: 'Jan', revenue: 2400, transactions: 240 },
@@ -42,6 +43,21 @@ const recentTransactions = [
 ];
 
 const Dashboard = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 640); // 640px is the sm breakpoint in Tailwind
+    };
+
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
+
   return (
     <div className="space-y-6 px-2 sm:px-4 md:px-6 lg:px-8 w-full">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -164,8 +180,8 @@ const Dashboard = () => {
               </select>
             </div>
           </div>
-          <div className="p-4 sm:p-5">
-            <div className="h-64 sm:h-80 w-full min-w-0">
+          <div className="p-4 sm:p-5 w-full min-w-[340px] overflow-x-scroll">
+            <div className="h-64 sm:h-80 w-full min-w-[600px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
                   data={data}
@@ -173,20 +189,41 @@ const Dashboard = () => {
                 >
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.05}/>
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#6B7280', fontSize: 12 }}
+                  />
+                  <YAxis 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#6B7280', fontSize: 12 }}
+                    width={60}
+                    orientation="left"
+                    tickFormatter={(value) => `${value}k`}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'white',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '6px',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                    formatter={(value) => [`RWF ${value}k`, 'Revenue']}
+                  />
                   <Area 
                     type="monotone" 
                     dataKey="revenue" 
                     stroke="#3B82F6" 
+                    strokeWidth={2}
                     fillOpacity={1} 
                     fill="url(#colorRevenue)" 
+                    name="Revenue"
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -206,19 +243,28 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="p-4 sm:p-5">
-            <div className="h-64 sm:h-80 w-full min-w-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={data}
-                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="transactions" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="w-full min-w-[340px] overflow-x-scroll ">
+              <div className="h-64 sm:h-80 w-full min-w-[600px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={data}
+                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                  >
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} width={60} orientation="left" tickFormatter={(value) => `${value}k`} />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'white',
+                        border: '1px solid #E5E7EB',
+                        borderRadius: '6px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                      }}
+                      formatter={(value) => [`RWF ${value}k`, 'Transactions']}
+                    />
+                    <Bar dataKey="transactions" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         </div>
@@ -234,56 +280,64 @@ const Dashboard = () => {
           </a>
         </div>
         <div className="p-2 sm:p-3">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Customer
-                  </th>
-                  <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Amount
-                  </th>
-                  <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {recentTransactions.map((transaction) => (
-                  <tr key={transaction.id} className="hover:bg-gray-50">
-                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
-                        {transaction.customer}
-                      </div>
-                    </td>
-                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        RWF {transaction.amount.toFixed(2)}
-                      </div>
-                    </td>
-                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        transaction.status === 'completed' 
-                          ? 'bg-success-100 text-success-800' 
-                          : transaction.status === 'processing' 
-                            ? 'bg-warning-100 text-warning-800' 
-                            : 'bg-error-100 text-error-800'
-                      }`}>
-                        {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
-                      </span>
-                    </td>
-                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                      {transaction.date}
-                    </td>
+          {isMobile ? (
+            <div className="space-y-2">
+              {recentTransactions.map((transaction) => (
+                <ResponsiveDataCard key={transaction.id} transaction={transaction} />
+              ))}
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Customer
+                    </th>
+                    <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th scope="col" className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {recentTransactions.map((transaction) => (
+                    <tr key={transaction.id} className="hover:bg-gray-50">
+                      <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {transaction.customer}
+                        </div>
+                      </td>
+                      <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          RWF {transaction.amount.toFixed(2)}
+                        </div>
+                      </td>
+                      <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          transaction.status === 'completed' 
+                            ? 'bg-success-100 text-success-800' 
+                            : transaction.status === 'processing' 
+                              ? 'bg-warning-100 text-warning-800' 
+                              : 'bg-error-100 text-error-800'
+                        }`}>
+                          {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                        </span>
+                      </td>
+                      <td className="px-2 sm:px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                        {transaction.date}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>
