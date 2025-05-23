@@ -91,6 +91,9 @@ export default {
         'fade-out': 'fade-out 0.3s ease-in-out',
         'slide-in-right': 'slide-in-right 0.3s ease-in-out',
         'slide-out-right': 'slide-out-right 0.3s ease-in-out',
+        'float': 'float 3s ease-in-out infinite',
+        'float-delayed': 'float 4s ease-in-out infinite',
+        'blob': 'blob 7s infinite',
       },
       keyframes: {
         'fade-in': {
@@ -109,8 +112,52 @@ export default {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(100%)' },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        'float-delayed': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-15px)' },
+        },
+        pulse: {
+          '0%, 100%': { opacity: 0.3 },
+          '50%': { opacity: 0.6 },
+        },
+        blob: {
+          '0%': {
+            transform: 'translate(0px, 0px) scale(1)',
+          },
+          '33%': {
+            transform: 'translate(30px, -50px) scale(1.1)',
+          },
+          '66%': {
+            transform: 'translate(-20px, 20px) scale(0.9)',
+          },
+          '100%': {
+            transform: 'translate(0px, 0px) scale(1)',
+          },
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.animation-delay-1000': {
+          'animation-delay': '1s',
+        },
+        '.animation-delay-2000': {
+          'animation-delay': '2s',
+        },
+        '.animation-delay-3000': {
+          'animation-delay': '3s',
+        },
+        '.animation-delay-4000': {
+          'animation-delay': '4s',
+        },
+      }
+      addUtilities(newUtilities)
+    }
+  ],
 };

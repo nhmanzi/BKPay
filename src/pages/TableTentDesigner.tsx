@@ -5,61 +5,101 @@ import jsPDF from 'jspdf';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, Stage } from '@react-three/drei';
 import * as THREE from 'three'
-const Template1 = '/assets/Template1.png';
 
-const gradients = [
+// Import portrait wave images
+const PortraitWave1 = '/assets/portrait/Portrait_01.jpg';
+const PortraitWave2 = '/assets/portrait/Portrait_02.jpg';
+const PortraitWave3 = '/assets/portrait/Portrait_03.jpg';
+const PortraitWave4 = '/assets/portrait/Portrait_04.jpg';
+
+// Import landscape images
+const LandscapeWave1 = '/assets/landscape/Landscape_01.jpg';
+const LandscapeWave2 = '/assets/landscape/Landscape_02.jpg';
+const LandscapeWave3 = '/assets/landscape/Landscape_03.jpg';
+const LandscapeWave4 = '/assets/landscape/Landscape_04.jpg';
+
+// Import circular images
+const Circular1 = '/assets/circular/Circular_01.jpg';
+const Circular2 = '/assets/circular/Circular_02.jpg';
+const Circular3 = '/assets/circular/Circular_03.jpg';
+const Circular4 = '/assets/circular/Circular_04.jpg';
+
+interface ImageTemplate {
+  name: string;
+  image: string;
+}
+
+const portraitTemplates: ImageTemplate[] = [
   {
-    name: 'Sunset',
-    stops: [
-      { offset: '0%', color: '#ff9966' },
-      { offset: '100%', color: '#ff5e62' }
-    ],
-    isImage: false
+    name: 'Wave 1',
+    image: PortraitWave1
   },
   {
-    name: 'Aqua',
-    stops: [
-      { offset: '0%', color: '#43cea2' },
-      { offset: '100%', color: '#185a9d' }
-    ],
-    isImage: false
+    name: 'Wave 2',
+    image: PortraitWave2
   },
   {
-    name: 'Template1',
-    isImage: true,
-    image: Template1
+    name: 'Wave 3',
+    image: PortraitWave3
+  },
+  {
+    name: 'Wave 4',
+    image: PortraitWave4
+  }
+];
+
+const landscapeTemplates: ImageTemplate[] = [
+  {
+    name: 'Wave 1',
+    image: LandscapeWave1
+  },
+  {
+    name: 'Wave 2',
+    image: LandscapeWave2
+  },
+  {
+    name: 'Wave 3',
+    image: LandscapeWave3
+  },
+  {
+    name: 'Wave 4',
+    image: LandscapeWave4
+  }
+];
+
+const circularTemplates: ImageTemplate[] = [
+  {
+    name: 'Circle 1',
+    image: Circular1
+  },
+  {
+    name: 'Circle 2',
+    image: Circular2
+  },
+  {
+    name: 'Circle 3',
+    image: Circular3
+  },
+  {
+    name: 'Circle 4',
+    image: Circular4
   }
 ];
 
 const Tent3D = ({ gradientIndex, type }: { gradientIndex: number, type: string }) => {
-  // Create a canvas texture for the selected gradient or use the image
+  // Create a texture for the selected image
   const texture = useMemo(() => {
-    if (gradients[gradientIndex].isImage) {
-      const imageUrl = gradients[gradientIndex].image;
-      if (typeof imageUrl === 'string') {
-        return new THREE.TextureLoader().load(imageUrl);
-      }
-      return undefined;
+    let templates: ImageTemplate[];
+    if (type === 'landscape') {
+      templates = landscapeTemplates;
+    } else if (type === 'circular' || type === 'circular-table-tent') {
+      templates = circularTemplates;
     } else {
-      const canvas = document.createElement('canvas');
-      canvas.width = 256;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        if (gradients[gradientIndex].stops) {
-          gradients[gradientIndex].stops.forEach(stop => {
-            grad.addColorStop(parseFloat(stop.offset) / 100, stop.color);
-          });
-        }
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-      const tex = new THREE.Texture(canvas);
-      tex.needsUpdate = true;
-      return tex;
+      templates = portraitTemplates;
     }
-  }, [gradientIndex]);
+    const selectedTemplate = templates[gradientIndex];
+    return new THREE.TextureLoader().load(selectedTemplate.image);
+  }, [gradientIndex, type]);
 
   const commonMaterialProps = {
     map: texture,
@@ -200,6 +240,15 @@ const TableTentDesigner = () => {
   const [selectedGradient, setSelectedGradient] = useState(0);
   const svgRef = useRef<HTMLDivElement>(null);
 
+  let templates: ImageTemplate[];
+  if (templateType === 'landscape') {
+    templates = landscapeTemplates;
+  } else if (templateType === 'circular' || templateType === 'circular-table-tent') {
+    templates = circularTemplates;
+  } else {
+    templates = portraitTemplates;
+  }
+
   const handleDownloadPDF = async () => {
     if (!svgRef.current) return;
     const canvas = await html2canvas(svgRef.current, { backgroundColor: null });
@@ -218,7 +267,7 @@ const TableTentDesigner = () => {
           <div style={{ width: 80 }}></div>
         </div>
         <div className="w-full flex flex-col md:flex-row gap-12 items-center justify-center">
-          <div className="w-full md:w-2/3 flex flex-col items-center">
+          <div className="w-full md:w-1/2 flex flex-col items-center">
             <div ref={svgRef} className="bg-gray-100 rounded-lg flex items-center justify-center p-8">
               <Canvas shadows camera={{ position: [0, 1, 4], fov: 40 }} style={{ width: 400, height: 400, background: '#f3f4f6', borderRadius: 16 }}>
                 <ambientLight intensity={0.7} />
@@ -231,20 +280,23 @@ const TableTentDesigner = () => {
               </Canvas>
             </div>
           </div>
-          <div className="w-full md:w-1/3 flex flex-col gap-4 items-center">
+          <div className="w-full md:w-1/2 flex flex-col gap-4 items-center">
             <label className="block text-sm font-medium text-gray-700 mb-1">Choose a design</label>
             <div className="flex gap-4">
-              {gradients.map((g, idx) => (
+              {templates.map((t, idx) => (
                 <button
-                  key={g.name}
-                  className={`rounded-2xl p-1 border-2 ${selectedGradient === idx ? 'border-primary-500' : 'border-transparent'} transition bg-white`}
+                  key={t.name}
+                  className={`${templateType === 'circular' || templateType === 'circular-table-tent' ? 'rounded-full' : 'rounded-lg'} p-1 border-2 ${selectedGradient === idx ? 'border-primary-500' : 'border-transparent'} transition bg-white`}
                   onClick={() => setSelectedGradient(idx)}
-                  style={g.isImage
-                    ? { width: 96, height: 144, background: `url(${g.image}) center/cover no-repeat`, boxShadow: '0 2px 12px 0 rgba(0,0,0,0.04)' }
-                    : { width: 96, height: 144, background: g.stops ? `linear-gradient(to bottom, ${g.stops.map(s => s.color).join(', ')})` : undefined, boxShadow: '0 2px 12px 0 rgba(0,0,0,0.04)' }}
-                  aria-label={g.name}
+                  style={{
+                    width: templateType === 'landscape' ? 144 : (templateType === 'circular' || templateType === 'circular-table-tent' ? 96 : 96),
+                    height: templateType === 'landscape' ? 96 : (templateType === 'circular' || templateType === 'circular-table-tent' ? 96 : 144),
+                    background: `url(${t.image}) center/cover no-repeat`,
+                    boxShadow: '0 2px 12px 0 rgba(0,0,0,0.04)'
+                  }}
+                  aria-label={t.name}
                 >
-                  <span className="sr-only">{g.name}</span>
+                  <span className="sr-only">{t.name}</span>
                 </button>
               ))}
             </div>

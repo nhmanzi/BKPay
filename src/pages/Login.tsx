@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
-import {  Mail, Lock, Loader2 } from 'lucide-react';
+import { Mail, Lock, Loader2 } from 'lucide-react';
 const BKPayLogo = '/assets/BKPAY.svg';
 
 interface LoginFormData {
@@ -28,11 +28,10 @@ const Login = () => {
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="text-center mb-8">
-      <div className="flex items-center justify-center mb-6 w-full">
+        <div className="flex items-center justify-center mb-6 w-full">
           <span className=" text-primary-600 font-bold rounded-full px-3 py-1 text-2xl ">
-            <img src={BKPayLogo} alt="BKPay Logo" className="h-12 w-auto" />
+            <img src={BKPayLogo} alt="BKPay Logo" className="h-32 w-auto" />
           </span>
-
         </div>
         <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
         <p className="mt-2 text-gray-600">Sign in to your merchant account</p>
