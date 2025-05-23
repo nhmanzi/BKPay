@@ -2,57 +2,46 @@ import React, { useState } from 'react';
 
 const loans = [
   {
-    name: 'Car Loan',
-    description: 'Finance your new or used car with flexible repayment options.',
+    name: 'Buying Inventory',
+    description: 'Get funds to purchase stock and keep your shelves full.',
     illustration: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="6" y="24" width="36" height="12" rx="6" fill="#3B82F6" fillOpacity="0.15" />
-        <rect x="12" y="16" width="24" height="12" rx="6" fill="#3B82F6" fillOpacity="0.3" />
-        <rect x="18" y="10" width="12" height="10" rx="5" fill="#3B82F6" />
+        <rect x="10" y="18" width="28" height="18" rx="4" fill="#3B82F6" fillOpacity="0.15" />
+        <rect x="16" y="24" width="16" height="8" rx="2" fill="#3B82F6" fillOpacity="0.3" />
+        <rect x="20" y="28" width="8" height="4" rx="1" fill="#3B82F6" />
       </svg>
     )
   },
   {
-    name: 'Micro Loan',
-    description: 'Quick, small loans for urgent needs or business capital.',
+    name: 'Paying Rent or Salaries',
+    description: 'Cover essential business expenses like rent and staff wages.',
     illustration: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="20" fill="#10B981" fillOpacity="0.15" />
-        <circle cx="24" cy="24" r="12" fill="#10B981" fillOpacity="0.3" />
-        <circle cx="24" cy="24" r="6" fill="#10B981" />
+        <rect x="8" y="20" width="32" height="16" rx="4" fill="#10B981" fillOpacity="0.15" />
+        <rect x="14" y="26" width="20" height="10" rx="3" fill="#10B981" fillOpacity="0.3" />
+        <rect x="20" y="30" width="8" height="4" rx="2" fill="#10B981" />
       </svg>
     )
   },
   {
-    name: 'Home Loan',
-    description: 'Affordable rates for buying or renovating your home.',
+    name: 'Expanding Store',
+    description: 'Finance renovations or open a new branch for your business.',
     illustration: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="8" y="20" width="32" height="16" rx="4" fill="#F59E42" fillOpacity="0.15" />
-        <rect x="14" y="26" width="20" height="10" rx="3" fill="#F59E42" fillOpacity="0.3" />
-        <polygon points="24,10 8,20 40,20" fill="#F59E42" />
+        <rect x="12" y="16" width="24" height="16" rx="4" fill="#F59E42" fillOpacity="0.15" />
+        <rect x="18" y="22" width="12" height="8" rx="2" fill="#F59E42" fillOpacity="0.3" />
+        <rect x="22" y="26" width="4" height="4" rx="1" fill="#F59E42" />
       </svg>
     )
   },
   {
-    name: 'Education Loan',
-    description: 'Support your studies with easy education financing.',
+    name: 'Cash Flow Support',
+    description: 'Bridge short-term gaps in your business finances.',
     illustration: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="24" cy="36" rx="16" ry="6" fill="#6366F1" fillOpacity="0.15" />
-        <rect x="14" y="14" width="20" height="12" rx="4" fill="#6366F1" fillOpacity="0.3" />
-        <rect x="20" y="10" width="8" height="8" rx="4" fill="#6366F1" />
-      </svg>
-    )
-  },
-  {
-    name: 'Personal Loan',
-    description: 'Unsecured loans for personal expenses and emergencies.',
-    illustration: (
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="10" y="28" width="28" height="10" rx="5" fill="#EC4899" fillOpacity="0.15" />
-        <circle cx="24" cy="20" r="10" fill="#EC4899" fillOpacity="0.3" />
-        <circle cx="24" cy="20" r="5" fill="#EC4899" />
+        <ellipse cx="24" cy="28" rx="16" ry="8" fill="#6366F1" fillOpacity="0.15" />
+        <rect x="16" y="20" width="16" height="12" rx="4" fill="#6366F1" fillOpacity="0.3" />
+        <rect x="20" y="24" width="8" height="4" rx="2" fill="#6366F1" />
       </svg>
     )
   }
@@ -78,7 +67,7 @@ const RequestLoan: React.FC = () => {
                   <span className="text-lg font-semibold text-gray-900">{loan.name}</span>
                   {selected === idx && <span className="ml-4 text-primary-600 font-bold">Selected</span>}
                 </div>
-                <p className="text-gray-600 mt-1">{loan.description}</p>
+                <div className="text-gray-600 mt-1">{loan.description}</div>
               </div>
             </button>
           ))}
