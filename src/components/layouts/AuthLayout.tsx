@@ -1,6 +1,5 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { CreditCard } from 'lucide-react';
 import HomeImage from '/assets/HomeImage.png'; // Adjust extension if needed
 
 const AuthLayout = () => {

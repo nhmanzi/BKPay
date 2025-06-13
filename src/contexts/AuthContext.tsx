@@ -5,7 +5,9 @@ interface User {
   name: string;
   email: string;
   role: string;
-  businessName?: string;
+  businessName: string;
+  isVerified?: boolean;
+  merchantCode: string;
 }
 
 interface AuthContextType {
@@ -14,6 +16,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   register: (userData: Omit<User, 'id'> & { password: string }) => Promise<void>;
+  verifyAccount: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,7 +36,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: 'Ngabo Bright',
         email:'ngabo@gmail.com',
         role: 'merchant',
-        businessName: 'KGL fits store'
+        businessName: 'Profit Prophets',
+        isVerified: false,
+        merchantCode: '11333357'
       });
     } catch (error) {
       console.error('Login failed:', error);
@@ -57,11 +62,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: userData.name,
         email: userData.email,
         role: userData.role,
-        businessName: userData.businessName
+        businessName: userData.businessName,
+        isVerified: false,
+        merchantCode: '11333357'
       });
     } catch (error) {
       console.error('Registration failed:', error);
       throw error;
+    }
+  };
+
+  const verifyAccount = async () => {
+    if (user) {
+      setUser({
+        ...user,
+        isVerified: true
+      });
     }
   };
 
@@ -71,7 +87,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAuthenticated: !!user,
       login, 
       logout,
-      register
+      register,
+      verifyAccount
     }}>
       {children}
     </AuthContext.Provider>

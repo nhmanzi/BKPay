@@ -183,11 +183,15 @@ const Transfers = () => {
                 <div className="flex space-x-4">
                   <label className="flex items-center p-3 border rounded-md cursor-pointer transition-colors hover:bg-gray-50 bg-primary-50 border-primary-300">
                     <input type="radio" name="transferType" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" defaultChecked />
-                    <span className="ml-2 text-sm font-medium text-gray-900">Deposit</span>
+                    <span className="ml-2 text-sm font-medium text-gray-900">MOMO</span>
                   </label>
                   <label className="flex items-center p-3 border rounded-md cursor-pointer transition-colors hover:bg-gray-50">
                     <input type="radio" name="transferType" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
-                    <span className="ml-2 text-sm font-medium text-gray-900">Withdrawal</span>
+                    <span className="ml-2 text-sm font-medium text-gray-900">BK to BK</span>
+                  </label>
+                  <label className="flex items-center p-3 border rounded-md cursor-pointer transition-colors hover:bg-gray-50">
+                    <input type="radio" name="transferType" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
+                    <span className="ml-2 text-sm font-medium text-gray-900">Local transfer</span>
                   </label>
                 </div>
               </div>
@@ -197,12 +201,12 @@ const Transfers = () => {
                   Amount
                 </label>
                 <div className="relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <div className="absolute inset-y-0 left-1 pl-5 flex items-center pointer-events-none">
                     <span className="text-gray-500">RWF</span>
                   </div>
                   <input
                     type="text"
-                    className="block w-full pl-7 pr-12 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                    className="block w-full pl-16 pr-12 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="0.00"
                   />
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">

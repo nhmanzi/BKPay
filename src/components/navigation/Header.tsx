@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Bell, Search } from 'lucide-react';
+import { Bell, Check, Search } from 'lucide-react';
 
 interface HeaderProps {
   children?: React.ReactNode;
@@ -38,19 +38,24 @@ const Header = ({ children }: HeaderProps) => {
               <span className="sr-only">View notifications</span>
               <div className="relative">
                 <Bell className="h-6 w-6" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-error-500 flex items-center justify-center text-[10px] text-white font-bold">
-                  3
-                </span>
+        
               </div>
             </button>
 
             {user && (
               <div className="ml-4 flex items-center">
                 <div className="ml-3 relative flex items-center">
+                <div className="relative">
                   <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-medium">
                     {user.name.charAt(0) + user.name.split(' ')[1]?.charAt(0)}
                   </div>
-                  <div className="ml-2 hidden md:block">
+                  {user?.isVerified && (
+                  <div className="absolute -top-1 -right-1 bg-green-500 rounded-full p-0.5">
+                    <Check className="h-2 w-2 text-white" />
+                  </div>
+                )}
+                </div>
+                  <div className="ml-3 hidden md:block">
                     <div className="text-sm font-medium text-gray-900">{user.name}</div>
                     <div className="text-xs text-gray-500">{user.businessName}</div>
                   </div>

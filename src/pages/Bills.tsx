@@ -21,6 +21,7 @@ interface NewBillData {
   customerName: string;
   amount: number;
   phoneNumber: string;
+  description: string;
 }
 
 const billsData = [
@@ -43,6 +44,7 @@ const Bills = () => {
     customerName: '',
     amount: 0,
     phoneNumber: '',
+    description: '',
   });
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -174,6 +176,18 @@ const Bills = () => {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  value={newBillData.description}
+                  onChange={(e) => setNewBillData(prev => ({ ...prev, description: e.target.value }))}
+                  className="input w-full min-h-[100px] resize-y"
+                  placeholder="Enter bill description"
+                />
+              </div>
+
               {qrCodeUrl ? (
                 <div className="text-center space-y-4">
                   <img 
@@ -202,7 +216,7 @@ const Bills = () => {
                       onClick={() => {
                         setShowNewBillModal(false);
                         setQrCodeUrl(null);
-                        setNewBillData({ customerName: '', amount: 0, phoneNumber: '' });
+                        setNewBillData({ customerName: '', amount: 0, phoneNumber: '', description: '' });
                       }}
                     >
                       Done

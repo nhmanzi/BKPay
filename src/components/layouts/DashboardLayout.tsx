@@ -17,7 +17,7 @@ type DashboardWelcomeModalProps = {
   merchantCode?: string;
 };
 
-const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchantCode = "23456" }: DashboardWelcomeModalProps) => {
+const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchantCode = "11333357" }: DashboardWelcomeModalProps) => {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
 
@@ -30,7 +30,7 @@ const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchant
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-80" >
-      <div className="rounded-2xl bg-white relative w-full max-w-md mx-auto overflow-hidden" >
+      <div className="rounded-2xl bg-white relative w-full max-w-xl mx-auto overflow-hidden" >
         <div className="h-48 w-full bg-gray-200 relative">
           {/* Placeholder image, replace src with actual asset if available */}
           <img src={welcomeImg} alt="Welcome" className="object-cover w-full h-full" />
