@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface User {
   id: string;
@@ -23,6 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const { t } = useTranslation();
 
   const login = async (email: string, password: string) => {
     // This would be replaced with actual API call
@@ -33,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Mock successful login
       setUser({
         id: '123',
-        name: 'Ngabo Bright',
+        name: 'Kevin Rutayisire',
         email:'ngabo@gmail.com',
         role: 'merchant',
         businessName: 'Profit Prophets',
@@ -41,8 +43,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         merchantCode: '11333357'
       });
     } catch (error) {
-      console.error('Login failed:', error);
-      throw error;
+      console.error(t('auth.loginFailed'), error);
+      throw new Error(t('auth.loginFailed'));
     }
   };
 
@@ -67,8 +69,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         merchantCode: '11333357'
       });
     } catch (error) {
-      console.error('Registration failed:', error);
-      throw error;
+      console.error(t('auth.registrationFailed'), error);
+      throw new Error(t('auth.registrationFailed'));
     }
   };
 

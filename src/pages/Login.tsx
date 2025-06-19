@@ -1,13 +1,117 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import { Mail, Lock, Loader2, Globe } from 'lucide-react';
+import i18n from 'i18next';
+import { useTranslation, initReactI18next } from 'react-i18next';
 const BKPayLogo = '/assets/BKPAY.svg';
 
 interface LoginFormData {
   email: string;
   password: string;
+}
+
+// Translation resources
+const resources = {
+  en: {
+    translation: {
+      welcome: 'Welcome back',
+      signInToAccount: 'Sign in to your merchant account',
+      email: 'Email',
+      password: 'Password',
+      rememberMe: 'Remember me',
+      forgotPassword: 'Forgot your password?',
+      signIn: 'Sign in',
+      signingIn: 'Signing in...',
+      becomeMerchant: 'Become a merchant?',
+      signUp: 'Sign up',
+      emailRequired: 'Email is required',
+      invalidEmail: 'Invalid email address',
+      passwordRequired: 'Password is required',
+      passwordMin: 'Password must be at least 6 characters',
+    },
+    auth: {
+      loginFailed: 'Login failed. Please check your credentials and try again.',
+      registrationFailed: 'Registration failed. Please try again.',
+    },
+  },
+  rw: {
+    translation: {
+      welcome: 'Murakaza neza',
+      signInToAccount: "Injira muri konti yawe y'ubucuruzi",
+      email: 'Imeyili',
+      password: "Ijambo ry'ibanga",
+      rememberMe: 'Munyibuke',
+      forgotPassword: "Wibagiwe ijambo ry'ibanga?",
+      signIn: 'Injira',
+      signingIn: 'Injira...',
+      becomeMerchant: 'Wifuza kuba umucuruzi?',
+      signUp: 'Iyandikishe',
+      emailRequired: 'Imeyili irakenewe',
+      invalidEmail: 'Imeyili siyo',
+      passwordRequired: "Ijambo ry'ibanga rirakenewe",
+      passwordMin: "Ijambo ry'ibanga rigomba kuba nibura inyuguti 6",
+    },
+    auth: {
+      loginFailed: 'Kwinjira byanze. Nyamuneka reba amakuru winjije wongere ugerageze.',
+      registrationFailed: 'Kwiyandikisha byanze. Ongera ugerageze.',
+    },
+  },
+  fr: {
+    translation: {
+      welcome: 'Bienvenue',
+      signInToAccount: 'Connectez-vous à votre compte marchand',
+      email: 'E-mail',
+      password: 'Mot de passe',
+      rememberMe: 'Souviens-toi de moi',
+      forgotPassword: 'Mot de passe oublié ?',
+      signIn: 'Se connecter',
+      signingIn: 'Connexion...',
+      becomeMerchant: 'Devenir marchand ?',
+      signUp: "S'inscrire",
+      emailRequired: "L'e-mail est requis",
+      invalidEmail: 'Adresse e-mail invalide',
+      passwordRequired: 'Le mot de passe est requis',
+      passwordMin: 'Le mot de passe doit comporter au moins 6 caractères',
+    },
+    auth: {
+      loginFailed: 'Échec de la connexion. Veuillez vérifier vos identifiants et réessayer.',
+      registrationFailed: 	"Échec de l\'inscription. Veuillez réessayer.",
+    },
+  },
+  sw: {
+    translation: {
+      welcome: 'Karibu tena',
+      signInToAccount: 'Ingia kwenye akaunti yako ya mfanyabiashara',
+      email: 'Barua pepe',
+      password: 'Nenosiri',
+      rememberMe: 'Nikumbuke',
+      forgotPassword: 'Umesahau nenosiri?',
+      signIn: 'Ingia',
+      signingIn: 'Inaingia...',
+      becomeMerchant: 'Unataka kuwa mfanyabiashara?',
+      signUp: 'Jisajili',
+      emailRequired: 'Barua pepe inahitajika',
+      invalidEmail: 'Barua pepe si sahihi',
+      passwordRequired: 'Nenosiri linahitajika',
+      passwordMin: 'Nenosiri lazima liwe na angalau herufi 6',
+    },
+    auth: {
+      loginFailed: 'Kuingia imeshindikana. Tafadhali angalia taarifa zako na ujaribu tena.',
+      registrationFailed: 'Usajili umeshindikana. Tafadhali jaribu tena.',
+    },
+  },
+};
+
+// Initialize i18n only once
+if (!i18n.isInitialized) {
+  i18n.use(initReactI18next).init({
+    resources,
+    lng: 'en',
+    fallbackLng: 'en',
+    interpolation: { escapeValue: false },
+  });
 }
 
 const Login = () => {
@@ -17,9 +121,11 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [language, setLanguage] = useState('en');
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const { t } = useTranslation();
 
   const languages = [
     { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'fr', name: 'French', flag: '🇫🇷' },
     { code: 'rw', name: 'Kinyarwanda', flag: '🇷🇼' },
     { code: 'sw', name: 'Swahili', flag: '🇹🇿' }
   ];
@@ -33,6 +139,10 @@ const Login = () => {
       // Handle login error
     }
   };
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
 
   return (
     <div className="w-full max-w-md mx-auto relative">
@@ -80,14 +190,14 @@ const Login = () => {
             <img src={BKPayLogo} alt="BKPay Logo" className="h-32 w-auto" />
           </span>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
-        <p className="mt-2 text-gray-600">Sign in to your merchant account</p>
+        <h2 className="text-2xl font-bold text-gray-900">{t('welcome')}</h2>
+        <p className="mt-2 text-gray-600">{t('signInToAccount')}</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
+            {t('email')}
           </label>
           <div className="mt-1 relative rounded-md shadow-sm">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -97,10 +207,10 @@ const Login = () => {
               id="email"
               type="email"
               {...register('email', { 
-                required: 'Email is required',
+                required: t('emailRequired'),
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address"
+                  message: t('invalidEmail')
                 }
               })}
               className={`block w-full pl-10 pr-3 py-2 border ${
@@ -116,7 +226,7 @@ const Login = () => {
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Password
+            {t('password')}
           </label>
           <div className="mt-1 relative rounded-md shadow-sm">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -126,10 +236,10 @@ const Login = () => {
               id="password"
               type={showPassword ? "text" : "password"}
               {...register('password', { 
-                required: 'Password is required',
+                required: t('passwordRequired'),
                 minLength: {
                   value: 6,
-                  message: 'Password must be at least 6 characters'
+                  message: t('passwordMin')
                 }
               })}
               className={`block w-full pl-10 pr-10 py-2 border ${
@@ -168,13 +278,13 @@ const Login = () => {
               className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
             />
             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-              Remember me
+              {t('rememberMe')}
             </label>
           </div>
 
           <div className="text-sm">
             <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-              Forgot your password?
+              {t('forgotPassword')}
             </a>
           </div>
         </div>
@@ -188,10 +298,10 @@ const Login = () => {
             {isSubmitting ? (
               <>
                 <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
-                Signing in...
+                {t('signingIn')}
               </>
             ) : (
-              'Sign in'
+              t('signIn')
             )}
           </button>
         </div>
@@ -199,9 +309,9 @@ const Login = () => {
 
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600">
-        Become a merchant?{' '}
+          {t('becomeMerchant')}{' '}
           <Link to="/register" className="font-medium text-primary-600 hover:text-primary-500">
-            Sign up
+            {t('signUp')}
           </Link>
         </p>
       </div>

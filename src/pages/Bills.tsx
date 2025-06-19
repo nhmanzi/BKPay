@@ -24,15 +24,18 @@ interface NewBillData {
   description: string;
 }
 
+interface Bill {
+  id: string;
+  customer: string;
+  email: string;
+  amount: string;
+  status: string;
+  date: string;
+  dueDate: string;
+}
+
 const billsData = [
-  { id: 'INV-001', customer: 'Jean Claude', email: 'jean.claude@example.com', amount: 1240000, status: 'paid', date: '2023-04-23', dueDate: '2023-05-23' },
-  { id: 'INV-002', customer: 'Marie Claire', email: 'marie.claire@example.com', amount: 755000, status: 'pending', date: '2023-04-22', dueDate: '2023-05-22' },
-  { id: 'INV-003', customer: 'Emmanuel', email: 'emmanuel@example.com', amount: 2340000, status: 'paid', date: '2023-04-21', dueDate: '2023-05-21' },
-  { id: 'INV-004', customer: 'Grace', email: 'grace@example.com', amount: 1809000, status: 'overdue', date: '2023-04-20', dueDate: '2023-05-10' },
-  { id: 'INV-005', customer: 'Patrick', email: 'patrick@example.com', amount: 149000, status: 'pending', date: '2023-04-19', dueDate: '2023-05-19' },
-  { id: 'INV-006', customer: 'Chantal', email: 'chantal@example.com', amount: 1490000, status: 'paid', date: '2023-04-18', dueDate: '2023-05-18' },
-  { id: 'INV-007', customer: 'David', email: 'david@example.com', amount: 568000, status: 'overdue', date: '2023-04-17', dueDate: '2023-05-01' },
-  { id: 'INV-008', customer: 'Josiane', email: 'josiane@example.com', amount: 3200000, status: 'paid', date: '2023-04-16', dueDate: '2023-05-16' }
+  { id: 'INV-001', customer: 'Culture Team', email: 'culture@bk.rw', amount: '2,000,000', status: 'pending', date: '2023-04-23', dueDate: '2023-05-23' },
 ];
 
 const Bills = () => {
@@ -48,6 +51,9 @@ const Bills = () => {
   });
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [viewQrCodeUrl, setViewQrCodeUrl] = useState<string | null>(null);
+  const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
+  const [showViewBillModal, setShowViewBillModal] = useState(false);
   
   const filteredBills = billsData.filter(bill => {
     const matchesSearch = 
@@ -85,13 +91,26 @@ const Bills = () => {
     const billId = `INV-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
     try {
       // Generate the QR code string in the required format
-      const qrData = `tel:*334*8*1*11078288*${newBillData.amount}#`;
+      const qrData = `tel:*334*8*1*11333357*${newBillData.amount}#`;
       const qrCodeDataUrl = await QRCode.toDataURL(qrData);
       setQrCodeUrl(qrCodeDataUrl);
     } catch (err) {
       console.error('Error generating QR code:', err);
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handleViewBill = async (bill: Bill) => {
+    setSelectedBill(bill);
+    setShowViewBillModal(true);
+    // Generate QR code for the bill (using similar logic as handleCreateBill)
+    try {
+      const qrData = `tel:*334*8*1*11333357*${bill.amount}#`;
+      const qrCodeDataUrl = await QRCode.toDataURL(qrData);
+      setViewQrCodeUrl(qrCodeDataUrl);
+    } catch (err) {
+      setViewQrCodeUrl(null);
     }
   };
 
@@ -244,30 +263,114 @@ const Bills = () => {
         </div>
       )}
 
+      {/* View Bill Modal */}
+      {showViewBillModal && selectedBill && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-2xl" style={{ boxShadow: '22px 12px 99.3px 6px rgba(94, 95, 136, 0.10)', border: '1px solid #E5E7EB' }}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold">Bill Details</h2>
+              <button 
+                onClick={() => {
+                  setShowViewBillModal(false);
+                  setSelectedBill(null);
+                  setViewQrCodeUrl(null);
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Invoice Number</h3>
+                <p className="text-base font-semibold text-gray-900">{selectedBill.id}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Status</h3>
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeColor(selectedBill.status)}`}>
+                  {selectedBill.status.charAt(0).toUpperCase() + selectedBill.status.slice(1)}
+                </span>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Customer Name</h3>
+                <p className="text-base text-gray-900">{selectedBill.customer}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Email</h3>
+                <p className="text-base text-gray-900">{selectedBill.email}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Amount</h3>
+                <p className="text-base text-gray-900">RWF {selectedBill.amount}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Issue Date</h3>
+                <p className="text-base text-gray-900">
+                  {new Date(selectedBill.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Due Date</h3>
+                <p className="text-base text-gray-900">
+                  {new Date(selectedBill.dueDate).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </p>
+              </div>
+            </div>
+
+            {viewQrCodeUrl && (
+              <div className="flex flex-col items-center mt-8">
+                <img src={viewQrCodeUrl} alt="Bill QR Code" className="w-40 h-40" />
+                <p className="text-sm text-gray-600 mt-2">Scan this QR code to view bill details</p>
+              </div>
+            )}
+
+            <div className="mt-8 flex justify-end space-x-4">
+              <button className="btn btn-outline">
+                <DownloadIcon className="h-5 w-5 mr-2" />
+                Download
+              </button>
+              <button className="btn btn-primary">
+                <Printer className="h-5 w-5 mr-2" />
+                Print
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Stats */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
           <div className="p-5">
             <div className="text-sm font-medium text-gray-500">Total Bills</div>
-            <div className="mt-1 text-3xl font-semibold text-gray-900">124</div>
+            <div className="mt-1 text-3xl font-semibold text-gray-900">1</div>
           </div>
         </div>
         <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
           <div className="p-5">
             <div className="text-sm font-medium text-gray-500">Paid</div>
-            <div className="mt-1 text-3xl font-semibold text-success-600">92</div>
+            <div className="mt-1 text-3xl font-semibold text-success-600">0</div>
           </div>
         </div>
         <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
           <div className="p-5">
             <div className="text-sm font-medium text-gray-500">Pending</div>
-            <div className="mt-1 text-3xl font-semibold text-warning-600">22</div>
+            <div className="mt-1 text-3xl font-semibold text-warning-600">1</div>
           </div>
         </div>
         <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
           <div className="p-5">
             <div className="text-sm font-medium text-gray-500">Overdue</div>
-            <div className="mt-1 text-3xl font-semibold text-error-600">10</div>
+            <div className="mt-1 text-3xl font-semibold text-error-600">0</div>
           </div>
         </div>
       </div>
@@ -407,7 +510,10 @@ const Bills = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
-                      <button className="text-gray-600 hover:text-gray-900">
+                      <button 
+                        className="text-gray-600 hover:text-gray-900"
+                        onClick={() => handleViewBill(bill)}
+                      >
                         <Eye className="h-5 w-5" />
                       </button>
                       <button className="text-gray-600 hover:text-gray-900">
@@ -444,7 +550,10 @@ const Bills = () => {
             header={bill.id}
             actions={
               <div className="flex items-center space-x-2">
-                <button className="text-gray-600 hover:text-gray-900">
+                <button 
+                  className="text-gray-600 hover:text-gray-900"
+                  onClick={() => handleViewBill(bill)}
+                >
                   <Eye className="h-5 w-5" />
                 </button>
                 <button className="text-gray-600 hover:text-gray-900">

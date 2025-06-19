@@ -89,30 +89,37 @@ const Flyers = () => {
                   </span>
                 </div>
               ) : (
-                <div className="flex items-center justify-center h-40 bg-gradient-to-br from-primary-50 to-primary-100">
+                <div className="relative flex items-center justify-center h-40 bg-gradient-to-br from-primary-50 to-primary-100">
                   {template.name === 'Portrait' && (
-                    <svg width="56" height="80" viewBox="0 0 56 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect x="8" y="8" width="40" height="64" rx="8" fill="#6366F1" fillOpacity="0.15" />
-                      <rect x="16" y="20" width="24" height="8" rx="2" fill="#6366F1" fillOpacity="0.3" />
-                      <rect x="16" y="36" width="24" height="4" rx="2" fill="#6366F1" fillOpacity="0.2" />
-                      <rect x="16" y="46" width="16" height="4" rx="2" fill="#6366F1" fillOpacity="0.2" />
-                    </svg>
+                    <div className="grid grid-cols-2 gap-1 w-20 h-28">
+                      <img src="/assets/portrait/Portrait_01.jpg" alt="Portrait 1" className="object-cover w-full h-full rounded" />
+                      <img src="/assets/portrait/Portrait_02.jpg" alt="Portrait 2" className="object-cover w-full h-full rounded" />
+                      <img src="/assets/portrait/Portrait_03.jpg" alt="Portrait 3" className="object-cover w-full h-full rounded" />
+                      <img src="/assets/portrait/Portrait_04.jpg" alt="Portrait 4" className="object-cover w-full h-full rounded" />
+                    </div>
                   )}
                   {template.name === 'Landscape' && (
-                    <svg width="80" height="56" viewBox="0 0 80 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect x="8" y="8" width="64" height="40" rx="8" fill="#6366F1" fillOpacity="0.15" />
-                      <rect x="20" y="16" width="32" height="8" rx="2" fill="#6366F1" fillOpacity="0.3" />
-                      <rect x="20" y="30" width="32" height="4" rx="2" fill="#6366F1" fillOpacity="0.2" />
-                      <rect x="20" y="38" width="20" height="4" rx="2" fill="#6366F1" fillOpacity="0.2" />
-                    </svg>
+                    <div className="w-full flex justify-center items-center h-full">
+                      <div className="grid grid-cols-3 gap-1 w-40 h-24">
+                        <img src="/assets/landscape/Landscape_01.jpg" alt="Landscape 1" className="object-cover w-full h-full rounded" />
+                        <img src="/assets/landscape/Landscape_02.jpg" alt="Landscape 2" className="object-cover w-full h-full rounded" />
+                        <img src="/assets/landscape/Landscape_02.png" alt="Landscape 2 PNG" className="object-cover w-full h-full rounded" />
+                        <img src="/assets/landscape/Landscape_03.jpg" alt="Landscape 3" className="object-cover w-full h-full rounded" />
+                        <img src="/assets/landscape/Landscape_04.jpg" alt="Landscape 4" className="object-cover w-full h-full rounded" />
+                      </div>
+                    </div>
                   )}
                   {template.name === 'Circular Table Tent' && (
-                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="40" cy="40" r="32" fill="#6366F1" fillOpacity="0.12" />
-                      <circle cx="40" cy="40" r="20" fill="#6366F1" fillOpacity="0.18" />
-                      <rect x="28" y="36" width="24" height="8" rx="4" fill="#6366F1" fillOpacity="0.25" />
-                    </svg>
+                    <div className="w-full flex justify-center items-center h-full">
+                      <div className="grid grid-cols-2 gap-1 w-32 h-30">
+                        <img src="/assets/circular/Circular_01.jpg" alt="Circular 1" className="object-cover w-full h-full rounded-full" />
+                        <img src="/assets/circular/Circular_02.jpg" alt="Circular 2" className="object-cover w-full h-full rounded-full" />
+                        <img src="/assets/circular/Circular_03.jpg" alt="Circular 3" className="object-cover w-full h-full rounded-full" />
+                        <img src="/assets/circular/Circular_04.jpg" alt="Circular 4" className="object-cover w-full h-full rounded-full" />
+                      </div>
+                    </div>
                   )}
+                  <div className="absolute inset-0 bg-black/40 rounded-lg pointer-events-none" />
                 </div>
               )}
               <div className="p-4 flex-1 flex flex-col justify-between">

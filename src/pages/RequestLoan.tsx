@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const loans = [
   {
-    name: 'Buying Inventory',
+    name: 'BK Merchant Loan',
     description: 'Get funds to purchase stock and keep your shelves full.',
     illustration: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -13,8 +13,7 @@ const loans = [
     )
   },
   {
-    name: 'Paying Rent or Salaries',
-    description: 'Cover essential business expenses like rent and staff wages.',
+    name: 'BK Quick+',
     illustration: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="8" y="20" width="32" height="16" rx="4" fill="#10B981" fillOpacity="0.15" />
@@ -24,8 +23,7 @@ const loans = [
     )
   },
   {
-    name: 'Expanding Store',
-    description: 'Finance renovations or open a new branch for your business.',
+    name: 'BK Quick',
     illustration: (
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="12" y="16" width="24" height="16" rx="4" fill="#F59E42" fillOpacity="0.15" />
@@ -33,18 +31,8 @@ const loans = [
         <rect x="22" y="26" width="4" height="4" rx="1" fill="#F59E42" />
       </svg>
     )
-  },
-  {
-    name: 'Cash Flow Support',
-    description: 'Bridge short-term gaps in your business finances.',
-    illustration: (
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="24" cy="28" rx="16" ry="8" fill="#6366F1" fillOpacity="0.15" />
-        <rect x="16" y="20" width="16" height="12" rx="4" fill="#6366F1" fillOpacity="0.3" />
-        <rect x="20" y="24" width="8" height="4" rx="2" fill="#6366F1" />
-      </svg>
-    )
   }
+  
 ];
 
 const RequestLoan: React.FC = () => {

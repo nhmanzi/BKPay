@@ -4,14 +4,10 @@ import { format } from 'date-fns';
 import ResponsiveDataCard from '../components/common/ResponsiveDataCard';
 
 const transfersData = [
-  { id: 'TR-001', type: 'deposit', amount: 5000000, status: 'completed', date: '2023-04-23', source: 'Bank Account', customer: 'Jean Claude' },
-  { id: 'TR-002', type: 'withdrawal', amount: 1200000, status: 'pending', date: '2023-04-22', destination: 'Bank Account', customer: 'Marie Claire' },
-  { id: 'TR-003', type: 'deposit', amount: 3500000, status: 'completed', date: '2023-04-21', source: 'Credit Card', customer: 'Emmanuel' },
-  { id: 'TR-004', type: 'withdrawal', amount: 800000, status: 'completed', date: '2023-04-20', destination: 'Bank Account', customer: 'Grace' },
-  { id: 'TR-005', type: 'deposit', amount: 1200000, status: 'failed', date: '2023-04-19', source: 'Bank Account', customer: 'Patrick' },
-  { id: 'TR-006', type: 'withdrawal', amount: 2500000, status: 'completed', date: '2023-04-18', destination: 'Bank Account', customer: 'Chantal' },
-  { id: 'TR-007', type: 'deposit', amount: 4200000, status: 'completed', date: '2023-04-17', source: 'Credit Card', customer: 'David' },
-  { id: 'TR-008', type: 'withdrawal', amount: 1800000, status: 'pending', date: '2023-04-16', destination: 'Bank Account', customer: 'Josiane' }
+  { id: 'TR-001', type: 'deposit', amount: 300000, status: 'completed', date: '2025-06-02', source: 'Bank Account', customer: 'Jean Claude' },
+  { id: 'TR-002', type: 'withdrawal', amount: 350000, status: 'pending', date: '2025-06-10', destination: 'BK Yacu Agent', customer: 'Marie Claire' },
+  { id: 'TR-003', type: 'deposit', amount: 20000, status: 'completed', date: '2025-05-21', source: 'Bank Account', customer: 'Emmanuel' },
+  { id: 'TR-004', type: 'deposit', amount: 17000, status: 'completed', date: '2025-06-13', source: 'Bank Account', customer: 'Grace' },
 ];
 
 const Transfers = () => {
@@ -19,6 +15,7 @@ const Transfers = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
   const [showNewTransfer, setShowNewTransfer] = useState(false);
+  const [selectedTransferType, setSelectedTransferType] = useState('MOMO');
   
   const filteredTransfers = transfersData.filter(transfer => {
     const matchesSearch = 
@@ -63,14 +60,14 @@ const Transfers = () => {
       </div>
 
       {/* Balance Cards */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 lg:grid-cols-2">
         <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
           <div className="p-5">
             <div className="flex items-center justify-between mb-4">
               <div className="text-sm font-medium text-gray-500">Available Balance</div>
               <Wallet className="h-5 w-5 text-primary-500" />
             </div>
-            <div className="text-3xl font-semibold text-gray-900">RWF 15,925,975</div>
+            <div className="text-3xl font-semibold text-gray-900">RWF 3,925,975</div>
             <div className="mt-1 text-sm text-gray-500">
               Last updated: {format(new Date(), 'MMM d, yyyy')}
             </div>
@@ -83,29 +80,12 @@ const Transfers = () => {
               <div className="text-sm font-medium text-gray-500">Pending</div>
               <Calendar className="h-5 w-5 text-warning-500" />
             </div>
-            <div className="text-3xl font-semibold text-gray-900">RWF 3,900,000</div>
-            <div className="mt-1 text-sm text-gray-500">2 pending transfers</div>
+            <div className="text-3xl font-semibold text-gray-900">RWF 350,000</div>
+            <div className="mt-1 text-sm text-gray-500">1 pending transfers</div>
           </div>
         </div>
         
-        <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 lg:col-span-1 sm:col-span-2">
-          <div className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-sm font-medium text-gray-500">Transfer Limit</div>
-              <ArrowUpDown className="h-5 w-5 text-gray-500" />
-            </div>
-            <div className="text-3xl font-semibold text-gray-900">RWF 65,000,000<span className="text-sm font-normal text-gray-500 ml-2">/ month</span></div>
-            <div className="mt-2">
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div className="bg-primary-600 h-2.5 rounded-full" style={{ width: '30%' }}></div>
-              </div>
-              <div className="flex justify-between mt-1 text-xs text-gray-500">
-                <span>RWF 19,500,000 used</span>
-                <span>RWF 45,500,000 remaining</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
 
       {/* Filters */}
@@ -181,16 +161,34 @@ const Transfers = () => {
                   Transfer Type
                 </label>
                 <div className="flex space-x-4">
-                  <label className="flex items-center p-3 border rounded-md cursor-pointer transition-colors hover:bg-gray-50 bg-primary-50 border-primary-300">
-                    <input type="radio" name="transferType" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" defaultChecked />
+                  <label className={`flex items-center p-3 border rounded-md cursor-pointer transition-colors hover:bg-gray-50 ${selectedTransferType === 'MOMO' ? 'bg-primary-50 border-primary-300' : ''}`}> 
+                    <input 
+                      type="radio" 
+                      name="transferType" 
+                      className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" 
+                      checked={selectedTransferType === 'MOMO'}
+                      onChange={() => setSelectedTransferType('MOMO')}
+                    />
                     <span className="ml-2 text-sm font-medium text-gray-900">MOMO</span>
                   </label>
-                  <label className="flex items-center p-3 border rounded-md cursor-pointer transition-colors hover:bg-gray-50">
-                    <input type="radio" name="transferType" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
+                  <label className={`flex items-center p-3 border rounded-md cursor-pointer transition-colors hover:bg-gray-50 ${selectedTransferType === 'BK to BK' ? 'bg-primary-50 border-primary-300' : ''}`}> 
+                    <input 
+                      type="radio" 
+                      name="transferType" 
+                      className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" 
+                      checked={selectedTransferType === 'BK to BK'}
+                      onChange={() => setSelectedTransferType('BK to BK')}
+                    />
                     <span className="ml-2 text-sm font-medium text-gray-900">BK to BK</span>
                   </label>
-                  <label className="flex items-center p-3 border rounded-md cursor-pointer transition-colors hover:bg-gray-50">
-                    <input type="radio" name="transferType" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
+                  <label className={`flex items-center p-3 border rounded-md cursor-pointer transition-colors hover:bg-gray-50 ${selectedTransferType === 'Local transfer' ? 'bg-primary-50 border-primary-300' : ''}`}> 
+                    <input 
+                      type="radio" 
+                      name="transferType" 
+                      className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" 
+                      checked={selectedTransferType === 'Local transfer'}
+                      onChange={() => setSelectedTransferType('Local transfer')}
+                    />
                     <span className="ml-2 text-sm font-medium text-gray-900">Local transfer</span>
                   </label>
                 </div>
@@ -217,17 +215,20 @@ const Transfers = () => {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  From Account
+                  {selectedTransferType === 'MOMO' ? 'To Mobile Money' : selectedTransferType === 'BK to BK' ? 'To BK Account' : 'To Local Bank Account'}
                 </label>
                 <div className="relative">
-                  <select className="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
-                    <option>Select account</option>
-                    <option>Bank Account (****4567)</option>
-                    <option>Credit Card (****8901)</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                    <ChevronDown className="h-4 w-4" />
-                  </div>
+                  <input
+                    type="text"
+                    className="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                    placeholder={
+                      selectedTransferType === 'MOMO'
+                        ? 'Enter mobile number'
+                        : selectedTransferType === 'BK to BK'
+                        ? 'Enter BK account number'
+                        : 'Enter local bank account number'
+                    }
+                  />
                 </div>
               </div>
             </div>

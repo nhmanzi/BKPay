@@ -29,11 +29,12 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
   
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Payments', href: '/payments', icon: CreditCard },
+    // { name: 'Payments', href: '/payments', icon: CreditCard },
     { name: 'Bills', href: '/bills', icon: Receipt },
     { name: 'Transfers', href: '/transfers', icon: ArrowRightLeft },
     { name: 'Request Loan', href: '/request-loan', icon: HandCoins },
     { name: 'Brand kits', href: '/flyers', icon: Megaphone },
+    { name: 'Loyalty Points', href: '/loyalty', icon: ShieldAlert },
   ];
 
   // const secondaryNavigation = [

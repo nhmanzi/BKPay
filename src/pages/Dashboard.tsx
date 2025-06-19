@@ -25,21 +25,17 @@ import {
 import ResponsiveDataCard from '../components/ResponsiveDataCard';
 
 const data = [
-  { name: 'Jan', revenue: 2400, transactions: 240 },
-  { name: 'Feb', revenue: 1398, transactions: 139 },
-  { name: 'Mar', revenue: 9800, transactions: 980 },
-  { name: 'Apr', revenue: 3908, transactions: 390 },
-  { name: 'May', revenue: 4800, transactions: 480 },
-  { name: 'Jun', revenue: 3800, transactions: 380 },
-  { name: 'Jul', revenue: 4300, transactions: 430 },
+  { name: 'Jan', revenue: 2, transactions: 2 },
+  { name: 'Feb', revenue: 4, transactions: 4 },
+  { name: 'Mar', revenue: 1, transactions: 1 },
+  { name: 'Apr', revenue: 5, transactions: 5 },
+  { name: 'May', revenue: 1, transactions: 1 },
+  { name: 'Jun', revenue: 50, transactions: 50 },
+  { name: 'Jul', revenue: 5, transactions: 5 },
 ];
 
 const recentTransactions = [
-  { id: 1, customer: 'Léon Muneza', amount: 1240.00, status: 'completed', date: '2h ago' },
-  { id: 2, customer: 'Teta Irakoze', amount: 75050, status: 'processing', date: '3h ago' },
-  { id: 3, customer: 'Eric Hirwa', amount: 23400, status: 'completed', date: '4h ago' },
-  { id: 4, customer: 'Ines Kamanzi', amount: 18090, status: 'completed', date: '6h ago' },
-  { id: 5, customer: 'Rita Nikuze', amount: 1490, status: 'failed', date: '12h ago' },
+  { id: 1, customer: 'Culture Team', amount: '20,000,000', status: 'pending', date: '2h ago' },
 ];
 
 const Dashboard = () => {
@@ -88,7 +84,7 @@ const Dashboard = () => {
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Revenue</dt>
                   <dd>
-                    <div className="text-lg font-semibold text-gray-900">RWF 338,192</div>
+                    <div className="text-lg font-semibold text-gray-900">RWF 20,000,000</div>
                     <div className="flex items-center text-xs font-medium text-success-600">
                       <ArrowUpRight className="h-3 w-3 mr-1" />
                       <span>12.5% from last week</span>
@@ -110,7 +106,7 @@ const Dashboard = () => {
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Customers</dt>
                   <dd>
-                    <div className="text-lg font-semibold text-gray-900">1,234</div>
+                    <div className="text-lg font-semibold text-gray-900">1</div>
                     <div className="flex items-center text-xs font-medium text-success-600">
                       <ArrowUpRight className="h-3 w-3 mr-1" />
                       <span>5.2% from last week</span>
@@ -132,7 +128,7 @@ const Dashboard = () => {
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Transactions</dt>
                   <dd>
-                    <div className="text-lg font-semibold text-gray-900">RWF 37,960</div>
+                    <div className="text-lg font-semibold text-gray-900">1</div>
                     <div className="flex items-center text-xs font-medium text-error-600">
                       <ArrowDownRight className="h-3 w-3 mr-1" />
                       <span>3.1% from last week</span>
@@ -154,7 +150,7 @@ const Dashboard = () => {
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">Average Sale</dt>
                   <dd>
-                    <div className="text-lg font-semibold text-gray-900">RWF 24,000</div>
+                    <div className="text-lg font-semibold text-gray-900">RWF 20,000,000</div>
                     <div className="flex items-center text-xs font-medium text-success-600">
                       <ArrowUpRight className="h-3 w-3 mr-1" />
                       <span>7.3% from last week</span>
@@ -315,14 +311,14 @@ const Dashboard = () => {
                       </td>
                       <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          RWF {transaction.amount.toFixed(2)}
+                          RWF {transaction.amount.toLocaleString()}
                         </div>
                       </td>
                       <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           transaction.status === 'completed' 
                             ? 'bg-success-100 text-success-800' 
-                            : transaction.status === 'processing' 
+                            : transaction.status === 'pending' 
                               ? 'bg-warning-100 text-warning-800' 
                               : 'bg-error-100 text-error-800'
                         }`}>

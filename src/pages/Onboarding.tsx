@@ -13,11 +13,13 @@ interface OnboardingFormData {
   password: string;
   confirmPassword: string;
   otp: string;
+  merchantCode: string;
 }
 
 const steps = [
   'Business Name',
   'Link Account',
+  'Merchant Code',
   'Set Password',
   'OTP Verification',
 ];
@@ -29,8 +31,10 @@ const Onboarding = () => {
   const [isLoadingAccounts, setIsLoadingAccounts] = useState(false);
   const [accounts, setAccounts] = useState<string[]>([]);
   const [selectedAccount, setSelectedAccount] = useState('');
+  const [merchantCodeStatus, setMerchantCodeStatus] = useState<'available' | 'taken' | null>(null);
+  const [isCheckingMerchantCode, setIsCheckingMerchantCode] = useState(false);
   const navigate = useNavigate();
-  const totalSteps = 4;
+  const totalSteps = 5;
   const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
   const { register: registerUser } = useAuth();
@@ -40,9 +44,12 @@ const Onboarding = () => {
   // Watch ID number for Step 2
   const idNumber = watch('idNumber');
 
+  // Watch merchant code for validation
+  const merchantCode = watch('merchantCode');
+
   // Simulate fetching accounts when ID number is 8 digits
   React.useEffect(() => {
-    if (step === 2 && idNumber && idNumber.length === 8 && /^\d{8}$/.test(idNumber)) {
+    if (step === 2 && idNumber && idNumber.length === 16 && /^\d{16}$/.test(idNumber)) {
       setIsLoadingAccounts(true);
       setAccounts([]);
       setSelectedAccount('');
@@ -50,9 +57,8 @@ const Onboarding = () => {
       setTimeout(() => {
         // Simulate fetched accounts
         setAccounts([
-          'BK-001-123456',
-          'BK-002-654321',
-          'BK-003-789012',
+          '1001123456 (Individual Current Account)',
+          '1006543821 (Special Savings Account)',
         ]);
         setIsLoadingAccounts(false);
       }, 1500);
@@ -75,6 +81,26 @@ const Onboarding = () => {
     }
   }, [otpDigits, setValue, step]);
 
+  // Validate merchant code
+  React.useEffect(() => {
+    if (step === 3 && merchantCode && merchantCode.length >= 6 && merchantCode.length <= 8) {
+      setIsCheckingMerchantCode(true);
+      setMerchantCodeStatus(null);
+      
+      // Simulate API call to check merchant code
+      setTimeout(() => {
+        if (merchantCode === '11333356') {
+          setMerchantCodeStatus('taken');
+        } else {
+          setMerchantCodeStatus('available');
+        }
+        setIsCheckingMerchantCode(false);
+      }, 500);
+    } else if (step === 3) {
+      setMerchantCodeStatus(null);
+    }
+  }, [merchantCode, step]);
+
   const nextStep = async () => {
     // Validate current step before proceeding
     let valid = false;
@@ -86,9 +112,12 @@ const Onboarding = () => {
         valid = await trigger(['idNumber', 'accountNumber']);
         break;
       case 3:
-        valid = await trigger(['email', 'password', 'confirmPassword']);
+        valid = await trigger('merchantCode') && merchantCodeStatus === 'available';
         break;
       case 4:
+        valid = await trigger(['email', 'password', 'confirmPassword']);
+        break;
+      case 5:
         valid = await trigger('otp');
         break;
       default:
@@ -102,10 +131,13 @@ const Onboarding = () => {
         setAccounts([]);
         setSelectedAccount('');
       } else if (step === 2) {
+        setValue('merchantCode', '');
+        setMerchantCodeStatus(null);
+      } else if (step === 3) {
         setValue('email', '');
         setValue('password', '');
         setValue('confirmPassword', '');
-      } else if (step === 3) {
+      } else if (step === 4) {
         setOtpDigits(['', '', '', '', '', '']);
         setValue('otp', '');
       }
@@ -127,10 +159,11 @@ const Onboarding = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     // Register/authenticate the user
     await registerUser({
-        name: 'Ngabo Bright',
-        email: 'ngabo@gmail.com',
+        name: 'Kevin Rutayisire',
+        email: 'kevinrutayisire@gmail.com',
         role: 'merchant',
-        businessName: 'KGL fits store',
+        businessName: 'Profit Prophets',
+        merchantCode: data.merchantCode,
         password: data.password
     });
     // Redirect to dashboard on success
@@ -150,6 +183,7 @@ const Onboarding = () => {
               <input
                 id="businessName"
                 type="text"
+                maxLength={40}
                 {...register('businessName', { required: 'Business name is required' })}
                 className="input w-full"
                 placeholder="Eg. Manzi Shop"
@@ -172,13 +206,13 @@ const Onboarding = () => {
               <input
                 id="idNumber"
                 type="text"
-                maxLength={8}
+                maxLength={16}
                 {...register('idNumber', {
                   required: 'ID number is required',
-                  pattern: { value: /^\d{8}$/, message: 'ID number must be 8 digits' },
+                  pattern: { value: /^\d{16}$/, message: 'ID number must be 16 digits' },
                 })}
                 className="input w-full"
-                placeholder="8 digit ID Number"
+                placeholder="16 digit ID Number"
                 autoComplete="off"
               />
               {errors.idNumber && (
@@ -219,6 +253,54 @@ const Onboarding = () => {
           </div>
         );
       case 3:
+        return (
+          <div className="space-y-6">
+            <h3 className="text-2xl font-semibold text-gray-900">Enter your merchant code</h3>
+            <div>
+              <label htmlFor="merchantCode" className="block text-sm font-medium text-gray-700 mb-1">
+                Merchant Code (6-8 characters)
+              </label>
+              <div className="relative">
+                <input
+                  id="merchantCode"
+                  type="text"
+                  maxLength={8}
+                  {...register('merchantCode', {
+                    required: 'Merchant code is required',
+                    minLength: { value: 6, message: 'Merchant code must be at least 6 characters' },
+                    maxLength: { value: 8, message: 'Merchant code must not exceed 8 characters' },
+                    pattern: {
+                      value: /^[A-Z0-9]*$/,
+                      message: 'Merchant code must contain only uppercase letters and numbers',
+                    },
+                    validate: value => {
+                      if (value === '11333356') {
+                        return 'This merchant code is already taken';
+                      }
+                      return true;
+                    }
+                  })}
+                  className={`input w-full ${merchantCode === '11333356' ? 'border-error-300' : merchantCode?.length >= 6 && merchantCode?.length <= 8 ? 'border-success-300' : ''}`}
+                  placeholder="Enter merchant code (6-8 characters)"
+                />
+                {isCheckingMerchantCode && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <Loader2 className="animate-spin h-5 w-5 text-gray-400" />
+                  </div>
+                )}
+              </div>
+              {errors.merchantCode && (
+                <p className="mt-1 text-sm text-error-600">{errors.merchantCode.message}</p>
+              )}
+              {!errors.merchantCode && merchantCode?.length >= 6 && merchantCode?.length <= 8 && (
+                <p className={`mt-1 text-sm ${merchantCode === '11333356' ? 'text-error-600' : 'text-success-600'}`}>
+                  {merchantCode === '11333356' ? 'This merchant code is already taken' : 'Merchant code is available'}
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      case 4:
         return (
           <div className="space-y-6">
             <h3 className="text-2xl font-semibold text-gray-900">Set and confirm your password</h3>
@@ -318,7 +400,7 @@ const Onboarding = () => {
             </div>
           </div>
         );
-      case 4:
+      case 5:
         return (
           <div className="space-y-6">
             <h3 className="text-2xl font-semibold text-gray-900">Enter OTP sent on your email</h3>
@@ -433,7 +515,7 @@ const Onboarding = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-between w-full max-w-[30rem] mx-auto px-4 sm:px-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-between w-full max-w-[40rem] mx-auto px-4 sm:px-6">
       {/* Top logo and title */}
       <div className="w-full flex flex-col items-center pt-6 sm:pt-12">
         <div className="flex items-center mb-4 sm:mb-6">
@@ -485,7 +567,7 @@ const Onboarding = () => {
       <div className="w-full text-center py-6 sm:py-10">
         <p className="text-gray-500 text-sm sm:text-base">
           Already a merchant ?{' '}
-          <a href="/login" className="text-primary-600 hover:underline">Sign up</a>
+          <a href="/login" className="text-primary-600 hover:underline">Sign in</a>
         </p>
       </div>
     </div>

@@ -17,7 +17,7 @@ type DashboardWelcomeModalProps = {
   merchantCode?: string;
 };
 
-const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchantCode = "11333357" }: DashboardWelcomeModalProps) => {
+const DashboardWelcomeModal = ({ open, onClose, merchantName = "Kevin", merchantCode = "11333357" }: DashboardWelcomeModalProps) => {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
 
@@ -42,7 +42,8 @@ const DashboardWelcomeModal = ({ open, onClose, merchantName = "Ngabo", merchant
         </div>
         <div className="p-8 pb-6 text-center">
           <h2 className="text-2xl font-semibold text-gray-900 mb-2 flex items-center justify-center gap-2">Welcome {merchantName} <span className='text-2xl'>🥳</span></h2>
-          <p className="text-gray-500 mb-6">Below is your merchant code</p>
+          <p className="text-gray-500 mb-4">Below is your merchant code</p>
+          <p className="text-gray-500 mb-6 text-xl font-semibold">Profit Prophets</p>
           <div className="flex justify-center gap-3 mb-6">
             {merchantCode.split('').map((digit, idx) => (
               <div key={idx} className="w-12 h-12 flex items-center justify-center rounded-lg border border-gray-200 text-2xl font-medium bg-gray-50">{digit}</div>
