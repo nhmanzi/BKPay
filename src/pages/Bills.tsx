@@ -35,7 +35,7 @@ interface Bill {
 }
 
 const billsData = [
-  { id: 'INV-001', customer: 'Culture Team', email: 'culture@bk.rw', amount: '2,000,000', status: 'pending', date: '2023-04-23', dueDate: '2023-05-23' },
+  { id: 'INV-001', customer: 'Culture Team', email: 'culture@bk.rw', amount: '20,000,000', status: 'pending', date: '2025-06-19', dueDate: '2025-06-30' },
 ];
 
 const Bills = () => {
