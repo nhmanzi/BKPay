@@ -11,8 +11,10 @@ import {
   HelpCircle,
   LogOut,
   HandCoins,
-  ShieldAlert
+  ShieldAlert,
+  QrCode
 } from 'lucide-react';
+import QRCode from 'qrcode';
 const BKPayLogo = '/assets/BKPAY-white.svg';
 import SidebarBg from '/assets/Sidebar.png';
 import VerificationModal from '../modals/VerificationModal';
@@ -26,6 +28,10 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [showQrModal, setShowQrModal] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const merchantCode = '11333357';
+  const qrString = `tel:*334*8*1*${merchantCode}#`;
   
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -45,6 +51,17 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
   const handleClick = () => {
     if (mobile && closeSidebar) {
       closeSidebar();
+    }
+  };
+
+  const handleShowQr = async () => {
+    try {
+      const url = await QRCode.toDataURL(qrString);
+      setQrCodeUrl(url);
+      setShowQrModal(true);
+    } catch (err) {
+      setQrCodeUrl(null);
+      setShowQrModal(true);
     }
   };
 
@@ -78,8 +95,13 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
       {user && (
         <div className="p-4 border-b border-gray-800 flex flex-col items-center">
           <div className="bg-gradient-to-r from-primary-400 to-primary-700 shadow-lg rounded-xl px-6 py-4 flex flex-col items-center w-full animate-pulse-slow">
-            <span className="text-xs font-semibold text-white uppercase tracking-widest mb-1">Merchant Code</span>
-            <span className="text-3xl font-mono font-bold text-white tracking-widest drop-shadow-lg select-all">11333357</span>
+          <span className="text-xs font-semibold text-white uppercase tracking-widest mb-1">Merchant Code</span>
+            <div className="flex items-center gap-2">
+              <span className="text-3xl font-mono font-bold text-white tracking-widest drop-shadow-lg select-all">{merchantCode}</span>
+              <button onClick={handleShowQr} className=" rounded hover:bg-primary-800/30 transition" title="Show QR Code">
+                <QrCode className="w-4 h-4 text-white drop-shadow" />
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -177,6 +199,26 @@ const Sidebar = ({ mobile = false, closeSidebar }: SidebarProps) => {
         isOpen={showVerificationModal}
         onClose={() => setShowVerificationModal(false)}
       />
+
+      {/* QR Code Modal */}
+      {showQrModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+          <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center relative w-full max-w-xs">
+            <button onClick={() => setShowQrModal(false)} className="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <h2 className="text-lg font-semibold mb-4 text-gray-900">Merchant QR Code</h2>
+            {qrCodeUrl ? (
+              <img src={qrCodeUrl} alt="Merchant QR Code" className="w-48 h-48 mb-4" />
+            ) : (
+              <div className="w-48 h-48 flex items-center justify-center bg-gray-100 mb-4 rounded">Generating...</div>
+            )}
+            <p className="text-sm text-gray-700 text-center break-all">{qrString}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

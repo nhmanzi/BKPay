@@ -260,7 +260,7 @@ const Onboarding = () => {
               <label htmlFor="merchantCode" className="block text-sm font-medium text-gray-700 mb-1">
                 Merchant Code (6-8 characters)
               </label>
-              <div className="relative">
+              <div className="relative flex items-center gap-2">
                 <input
                   id="merchantCode"
                   type="text"
@@ -283,6 +283,16 @@ const Onboarding = () => {
                   className={`input w-full ${merchantCode === '11333356' ? 'border-error-300' : merchantCode?.length >= 6 && merchantCode?.length <= 8 ? 'border-success-300' : ''}`}
                   placeholder="Enter merchant code (6-8 characters)"
                 />
+                <button
+                  type="button"
+                  className="btn btn-outline px-2 py-1 text-xs whitespace-nowrap"
+                  onClick={() => {
+                    const randomCode = Math.floor(10000000 + Math.random() * 90000000).toString();
+                    setValue('merchantCode', randomCode, { shouldValidate: true });
+                  }}
+                >
+                  Generate
+                </button>
                 {isCheckingMerchantCode && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     <Loader2 className="animate-spin h-5 w-5 text-gray-400" />
