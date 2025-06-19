@@ -114,25 +114,53 @@ const Bills = () => {
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-        <h1 className="text-2xl font-semibold text-gray-900">Bills & Invoices</h1>
-        <div className="flex items-center space-x-4">
-          <button className="btn btn-outline">
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </button>
-          <button 
-            className="btn btn-primary"
-            onClick={() => setShowNewBillModal(true)}
-          >
-            <FilePlus className="h-4 w-4 mr-2" />
-            New Bill
-          </button>
-        </div>
-      </div>
+  // Download bill as text file
+  const handleDownloadBill = (bill: Bill) => {
+    const content = `Invoice: ${bill.id}\nCustomer: ${bill.customer}\nEmail: ${bill.email}\nAmount: RWF ${bill.amount}\nStatus: ${bill.status}\nIssue Date: ${bill.date}\nDue Date: ${bill.dueDate}`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${bill.id}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
+  // Print bill details
+  const handlePrintBill = (bill: Bill) => {
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Print Bill - ${bill.id}</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 2rem; }
+              h2 { color: #1e293b; }
+              .label { font-weight: bold; }
+              .row { margin-bottom: 0.5rem; }
+            </style>
+          </head>
+          <body>
+            <h2>Bill Details</h2>
+            <div class="row"><span class="label">Invoice:</span> ${bill.id}</div>
+            <div class="row"><span class="label">Customer:</span> ${bill.customer}</div>
+            <div class="row"><span class="label">Email:</span> ${bill.email}</div>
+            <div class="row"><span class="label">Amount:</span> RWF ${bill.amount}</div>
+            <div class="row"><span class="label">Status:</span> ${bill.status}</div>
+            <div class="row"><span class="label">Issue Date:</span> ${bill.date}</div>
+            <div class="row"><span class="label">Due Date:</span> ${bill.dueDate}</div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+    }
+  };
+
+  return (
+    <>
       {/* New Bill Modal */}
       {showNewBillModal && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
@@ -334,11 +362,11 @@ const Bills = () => {
             )}
 
             <div className="mt-8 flex justify-end space-x-4">
-              <button className="btn btn-outline">
+              <button className="btn btn-outline" onClick={() => handleDownloadBill(selectedBill)}>
                 <DownloadIcon className="h-5 w-5 mr-2" />
                 Download
               </button>
-              <button className="btn btn-primary">
+              <button className="btn btn-primary" onClick={() => handlePrintBill(selectedBill)}>
                 <Printer className="h-5 w-5 mr-2" />
                 Print
               </button>
@@ -347,238 +375,258 @@ const Bills = () => {
         </div>
       )}
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
-          <div className="p-5">
-            <div className="text-sm font-medium text-gray-500">Total Bills</div>
-            <div className="mt-1 text-3xl font-semibold text-gray-900">1</div>
-          </div>
-        </div>
-        <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
-          <div className="p-5">
-            <div className="text-sm font-medium text-gray-500">Paid</div>
-            <div className="mt-1 text-3xl font-semibold text-success-600">0</div>
-          </div>
-        </div>
-        <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
-          <div className="p-5">
-            <div className="text-sm font-medium text-gray-500">Pending</div>
-            <div className="mt-1 text-3xl font-semibold text-warning-600">1</div>
-          </div>
-        </div>
-        <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
-          <div className="p-5">
-            <div className="text-sm font-medium text-gray-500">Overdue</div>
-            <div className="mt-1 text-3xl font-semibold text-error-600">0</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 p-5">
-        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-          <div className="flex-1 relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search by customer, email or invoice ID"
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="flex space-x-4">
-            <div className="relative">
-              <select
-                className="appearance-none block pl-3 pr-10 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="all">All Status</option>
-                <option value="paid">Paid</option>
-                <option value="pending">Pending</option>
-                <option value="overdue">Overdue</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                <ChevronDown className="h-4 w-4" />
-              </div>
-            </div>
-            <div className="relative">
-              <select
-                className="appearance-none block pl-3 pr-10 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-                value={dateFilter}
-                onChange={(e) => setDateFilter(e.target.value)}
-              >
-                <option value="all">All Dates</option>
-                <option value="this-month">This Month</option>
-                <option value="last-month">Last Month</option>
-                <option value="this-year">This Year</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                <ChevronDown className="h-4 w-4" />
-              </div>
-            </div>
-            <button className="btn btn-outline px-3 py-2 h-full">
-              <Filter className="h-5 w-5" />
-              <span className="sr-only">More filters</span>
+      {/* Main Page Content */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+          <h1 className="text-2xl font-semibold text-gray-900">Bills & Invoices</h1>
+          <div className="flex items-center space-x-4">
+            <button className="btn btn-outline">
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </button>
+            <button 
+              className="btn btn-primary"
+              onClick={() => setShowNewBillModal(true)}
+            >
+              <FilePlus className="h-4 w-4 mr-2" />
+              New Bill
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Bills Table */}
-      <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 hidden md:block">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <div className="flex items-center">
-                    Invoice
-                    <ArrowUpDown className="h-4 w-4 ml-1" />
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <div className="flex items-center">
-                    Customer
-                    <ArrowUpDown className="h-4 w-4 ml-1" />
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <div className="flex items-center">
-                    Amount
-                    <ArrowUpDown className="h-4 w-4 ml-1" />
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <div className="flex items-center">
-                    Status
-                    <ArrowUpDown className="h-4 w-4 ml-1" />
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <div className="flex items-center">
-                    Issue Date
-                    <ArrowUpDown className="h-4 w-4 ml-1" />
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <div className="flex items-center">
-                    Due Date
-                    <ArrowUpDown className="h-4 w-4 ml-1" />
-                  </div>
-                </th>
-                <th scope="col" className="relative px-6 py-3">
-                  <span className="sr-only">Actions</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredBills.map((bill) => (
-                <tr key={bill.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-600">
-                    {bill.id}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{bill.customer}</div>
-                    <div className="text-sm text-gray-500">{bill.email}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">RWF {bill.amount.toLocaleString()}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeColor(bill.status)}`}>
-                      {bill.status.charAt(0).toUpperCase() + bill.status.slice(1)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(bill.date).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(bill.dueDate).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end space-x-2">
-                      <button 
-                        className="text-gray-600 hover:text-gray-900"
-                        onClick={() => handleViewBill(bill)}
-                      >
-                        <Eye className="h-5 w-5" />
-                      </button>
-                      <button className="text-gray-600 hover:text-gray-900">
-                        <DownloadIcon className="h-5 w-5" />
-                      </button>
-                      <button className="text-gray-600 hover:text-gray-900">
-                        <Printer className="h-5 w-5" />
-                      </button>
-                      <div className="relative group">
-                        <button className="text-gray-600 hover:text-gray-900">
-                          <MoreVertical className="h-5 w-5" />
+        {/* Stats */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
+            <div className="p-5">
+              <div className="text-sm font-medium text-gray-500">Total Bills</div>
+              <div className="mt-1 text-3xl font-semibold text-gray-900">1</div>
+            </div>
+          </div>
+          <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
+            <div className="p-5">
+              <div className="text-sm font-medium text-gray-500">Paid</div>
+              <div className="mt-1 text-3xl font-semibold text-success-600">0</div>
+            </div>
+          </div>
+          <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
+            <div className="p-5">
+              <div className="text-sm font-medium text-gray-500">Pending</div>
+              <div className="mt-1 text-3xl font-semibold text-warning-600">1</div>
+            </div>
+          </div>
+          <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
+            <div className="p-5">
+              <div className="text-sm font-medium text-gray-500">Overdue</div>
+              <div className="mt-1 text-3xl font-semibold text-error-600">0</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 p-5">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            <div className="flex-1 relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search by customer, email or invoice ID"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className="flex space-x-4">
+              <div className="relative">
+                <select
+                  className="appearance-none block pl-3 pr-10 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <option value="all">All Status</option>
+                  <option value="paid">Paid</option>
+                  <option value="pending">Pending</option>
+                  <option value="overdue">Overdue</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                  <ChevronDown className="h-4 w-4" />
+                </div>
+              </div>
+              <div className="relative">
+                <select
+                  className="appearance-none block pl-3 pr-10 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                  value={dateFilter}
+                  onChange={(e) => setDateFilter(e.target.value)}
+                >
+                  <option value="all">All Dates</option>
+                  <option value="this-month">This Month</option>
+                  <option value="last-month">Last Month</option>
+                  <option value="this-year">This Year</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                  <ChevronDown className="h-4 w-4" />
+                </div>
+              </div>
+              <button className="btn btn-outline px-3 py-2 h-full">
+                <Filter className="h-5 w-5" />
+                <span className="sr-only">More filters</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Bills Table */}
+        <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200 hidden md:block">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div className="flex items-center">
+                      Invoice
+                      <ArrowUpDown className="h-4 w-4 ml-1" />
+                    </div>
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div className="flex items-center">
+                      Customer
+                      <ArrowUpDown className="h-4 w-4 ml-1" />
+                    </div>
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div className="flex items-center">
+                      Amount
+                      <ArrowUpDown className="h-4 w-4 ml-1" />
+                    </div>
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div className="flex items-center">
+                      Status
+                      <ArrowUpDown className="h-4 w-4 ml-1" />
+                    </div>
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div className="flex items-center">
+                      Issue Date
+                      <ArrowUpDown className="h-4 w-4 ml-1" />
+                    </div>
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <div className="flex items-center">
+                      Due Date
+                      <ArrowUpDown className="h-4 w-4 ml-1" />
+                    </div>
+                  </th>
+                  <th scope="col" className="relative px-6 py-3">
+                    <span className="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredBills.map((bill) => (
+                  <tr key={bill.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-600">
+                      {bill.id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{bill.customer}</div>
+                      <div className="text-sm text-gray-500">{bill.email}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">RWF {bill.amount.toLocaleString()}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeColor(bill.status)}`}>
+                        {bill.status.charAt(0).toUpperCase() + bill.status.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(bill.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(bill.dueDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex items-center justify-end space-x-2">
+                        <button 
+                          className="text-gray-600 hover:text-gray-900"
+                          onClick={() => handleViewBill(bill)}
+                        >
+                          <Eye className="h-5 w-5" />
                         </button>
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
-                          <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Bill</a>
-                          <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Send Reminder</a>
-                          <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mark as Paid</a>
-                          <a href="#" className="block px-4 py-2 text-sm text-error-600 hover:bg-gray-100">Delete</a>
+                        <button className="text-gray-600 hover:text-gray-900" onClick={() => handleDownloadBill(bill)}>
+                          <DownloadIcon className="h-5 w-5" />
+                        </button>
+                        <button className="text-gray-600 hover:text-gray-900" onClick={() => handlePrintBill(bill)}>
+                          <Printer className="h-5 w-5" />
+                        </button>
+                        <div className="relative group">
+                          {/* <button className="text-gray-600 hover:text-gray-900">
+                            <MoreVertical className="h-5 w-5" />
+                          </button> */}
+                          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
+                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Bill</a>
+                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Send Reminder</a>
+                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mark as Paid</a>
+                            <a href="#" className="block px-4 py-2 text-sm text-error-600 hover:bg-gray-100">Delete</a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Cards for mobile */}
+        <div className="block md:hidden">
+          {filteredBills.map((bill) => (
+            <ResponsiveDataCard
+              key={bill.id}
+              header={bill.id}
+              actions={
+                <div className="flex items-center space-x-2">
+                  <button 
+                    className="text-gray-600 hover:text-gray-900"
+                    onClick={() => handleViewBill(bill)}
+                  >
+                    <Eye className="h-5 w-5" />
+                  </button>
+                  <button className="text-gray-600 hover:text-gray-900" onClick={() => handleDownloadBill(bill)}>
+                    <DownloadIcon className="h-5 w-5" />
+                  </button>
+                  <button className="text-gray-600 hover:text-gray-900" onClick={() => handlePrintBill(bill)}>
+                    <Printer className="h-5 w-5" />
+                  </button>
+                  <button className="text-gray-600 hover:text-gray-900">
+                    <MoreVertical className="h-5 w-5" />
+                  </button>
+                </div>
+              }
+              rows={[
+                { label: 'Customer', value: bill.customer },
+                { label: 'Email', value: bill.email },
+                { label: 'Amount', value: `RWF ${bill.amount.toLocaleString()}` },
+                { label: 'Status', value: bill.status.charAt(0).toUpperCase() + bill.status.slice(1), badgeClass: `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeColor(bill.status)}` },
+                { label: 'Issue Date', value: new Date(bill.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) },
+                { label: 'Due Date', value: new Date(bill.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) },
+              ]}
+            />
+          ))}
         </div>
       </div>
-
-      {/* Cards for mobile */}
-      <div className="block md:hidden">
-        {filteredBills.map((bill) => (
-          <ResponsiveDataCard
-            key={bill.id}
-            header={bill.id}
-            actions={
-              <div className="flex items-center space-x-2">
-                <button 
-                  className="text-gray-600 hover:text-gray-900"
-                  onClick={() => handleViewBill(bill)}
-                >
-                  <Eye className="h-5 w-5" />
-                </button>
-                <button className="text-gray-600 hover:text-gray-900">
-                  <DownloadIcon className="h-5 w-5" />
-                </button>
-                <button className="text-gray-600 hover:text-gray-900">
-                  <Printer className="h-5 w-5" />
-                </button>
-                <button className="text-gray-600 hover:text-gray-900">
-                  <MoreVertical className="h-5 w-5" />
-                </button>
-              </div>
-            }
-            rows={[
-              { label: 'Customer', value: bill.customer },
-              { label: 'Email', value: bill.email },
-              { label: 'Amount', value: `RWF ${bill.amount.toLocaleString()}` },
-              { label: 'Status', value: bill.status.charAt(0).toUpperCase() + bill.status.slice(1), badgeClass: `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeColor(bill.status)}` },
-              { label: 'Issue Date', value: new Date(bill.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) },
-              { label: 'Due Date', value: new Date(bill.dueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) },
-            ]}
-          />
-        ))}
-      </div>
-    </div>
+    </>
   );
 };
 
