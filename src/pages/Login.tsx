@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
-import { Mail, Lock, Loader2 } from 'lucide-react';
+import { Mail, Lock, Loader2, Globe } from 'lucide-react';
 const BKPayLogo = '/assets/BKPAY.svg';
 
 interface LoginFormData {
@@ -15,6 +15,14 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [language, setLanguage] = useState('en');
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+
+  const languages = [
+    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'rw', name: 'Kinyarwanda', flag: '🇷🇼' },
+    { code: 'sw', name: 'Swahili', flag: '🇹🇿' }
+  ];
 
   const onSubmit = async (data: LoginFormData) => {
     try {
@@ -27,7 +35,45 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-md mx-auto relative">
+      {/* Language Selector */}
+      <div className="fixed top-16 right-16">
+        <div className="relative">
+          <button
+            onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+            className="flex items-center space-x-1 px-3 py-1.5 border border-gray-300 rounded-md text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-colors duration-200"
+          >
+            <span className="text-sm font-medium flex items-center gap-2">
+              <span>{languages.find(lang => lang.code === language)?.flag}</span>
+              <span>{languages.find(lang => lang.code === language)?.name}</span>
+            </span>
+          </button>
+          
+          {showLanguageDropdown && (
+            <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+              <div className="py-1" role="menu">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setLanguage(lang.code);
+                      setShowLanguageDropdown(false);
+                    }}
+                    className={`${
+                      language === lang.code ? 'bg-gray-100' : ''
+                    } block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2`}
+                    role="menuitem"
+                  >
+                    <span>{lang.flag}</span>
+                    {lang.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-6 w-full">
           <span className=" text-primary-600 font-bold rounded-full px-3 py-1 text-2xl ">
